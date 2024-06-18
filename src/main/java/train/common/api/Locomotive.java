@@ -155,6 +155,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         dataWatcher.addObject(26, guiDetailsJSON());
         dataWatcher.addObject(27, renderRefs.toString());
         dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
+        dataWatcher.addObject(28, String.valueOf(canBePulled));
         //dataWatcher.addObject(32, lineWaypoints);
         setAccel(0);
         setBrake(0);
@@ -264,6 +265,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             dataWatcher.updateObject(2, maxSpeed);
         }
     }
+
+
 
     /**
      * returns the absolute maximum speed of the given locomotive (speed in
@@ -452,6 +455,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         nbttagcompound.setBoolean("isConnected", isConnected);
         nbttagcompound.setBoolean("stationStop", stationStop);
         nbttagcompound.setBoolean("lampOn", lampOn);
+
+
     }
 
     @Override
@@ -485,6 +490,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         isConnected = ntc.getBoolean("isConnected");
         stationStop = ntc.getBoolean("stationStop");
         dataWatcher.updateObject(5, trainID);
+        dataWatcher.updateObject(28, String.valueOf(canBePulled));
     }
 
     /**
@@ -537,6 +543,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (i == 15) {
             brakePressed = false;
         }
+
         if (i == 16) {
             if (mtcStatus != 0 && this.mtcType != 1) {
                 if (this instanceof IAT2Compatible) {
@@ -1221,7 +1228,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             dataWatcher.updateObject(26, guiDetailsJSON());
             dataWatcher.updateObject(27, renderRefs.toString());
             dataWatcher.updateObject(31, ("1c/" + castToString((int) (currentFuelConsumptionChange)) + " per tick"));
-
+            dataWatcher.updateObject(28, String.valueOf(canBePulled));
 
             if (this.worldObj.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.water, this) && this.updateTicks % 4 == 0) {
                 if (!hasDrowned && !worldObj.isRemote && FMLCommonHandler.instance().getMinecraftServerInstance() != null && this.lastEntityRider instanceof EntityPlayer) {
@@ -1376,6 +1383,11 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 
     public boolean isLocoTurnedOn() {
         return isLocoTurnedOn;
+    }
+
+    public boolean CanBePulled()
+    {
+        return Boolean.valueOf(dataWatcher.getWatchableObjectString(28));
     }
 
     // private int placeInSpecialInvent(ItemStack itemstack1, int i, boolean doAdd) {
