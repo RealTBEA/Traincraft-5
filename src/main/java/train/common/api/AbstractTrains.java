@@ -2,6 +2,8 @@ package train.common.api;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
@@ -198,12 +200,14 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 				break;
 			}
 		}
-		for (RenderEnum render : RenderEnum.values()) {
-			if (render.getEntityClass().equals(this.getClass())) {
-				renderSpec = render;
-				break;
-			}
-		}
+
+		//for (RenderEnum render : RenderEnum.values()) {
+		//	if (render.getEntityClass().equals(this.getClass())) {
+		//		renderSpec = render;
+		//		break;
+		//	}
+		//}
+
 	}
 
 	public AbstractTrains(World world, double x, double y, double z){
