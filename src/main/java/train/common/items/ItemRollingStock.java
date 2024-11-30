@@ -23,7 +23,11 @@ import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStock.EntityTracksBuilder;
-import train.common.library.*;
+import train.common.items.ItemTCRail.TrackTypes;
+import train.common.library.BlockIDs;
+import train.common.library.EnumTrains;
+import train.common.library.Info;
+import train.common.library.TypeOfRollingStock;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
@@ -233,17 +237,13 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
         }
         if (tileentity != null && tileentity instanceof TileTCRail) {
             TileTCRail tile = (TileTCRail) tileentity;
-            if (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.SMALL_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING.getLabel())
-                    || tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING_1.getLabel())
-                    || tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING_2.getLabel())
-                    || tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.EMBEDDED_SMALL_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.VERY_LONG_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.EMBEDDED_LONG_STRAIGHT.getLabel())
-                    || tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
+            if (tile.getType().equals(TrackTypes.MEDIUM_STRAIGHT.getLabel())
+                    || tile.getType().equals(TrackTypes.SMALL_STRAIGHT.getLabel())
+                    || tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING.getLabel())
+                    || tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_1.getLabel())
+                    || tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_2.getLabel())
+                    || tile.getType().equals(TrackTypes.LONG_STRAIGHT.getLabel())
+                    || tile.getType().equals(TrackTypes.VERY_LONG_STRAIGHT.getLabel())
             ) {
                 this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
                 return true;
@@ -253,13 +253,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
         } else if (tileentity != null && tileentity instanceof TileTCRailGag) {
             TileTCRailGag tileGag = (TileTCRailGag) tileentity;
             TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
-            if (tile != null
-                    && tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
-                        || tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())
-                        || tile.getType().equals(EnumTracks.VERY_LONG_STRAIGHT.getLabel())
-                        || tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
-                        || tile.getType().equals(EnumTracks.EMBEDDED_LONG_STRAIGHT.getLabel())
-                        || tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
+            if (tile != null && tile.getType().equals(TrackTypes.MEDIUM_STRAIGHT.getLabel())
+                    || tile.getType().equals(TrackTypes.LONG_STRAIGHT.getLabel())
+                    || tile.getType().equals(TrackTypes.VERY_LONG_STRAIGHT.getLabel())
             ) {
 
                 this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);

@@ -261,28 +261,5 @@ public class ModelRenderHelper
         }
     }
 
-    public static void SetupDynamicBallastColour(int ballastColour)
-    {
-        float r = (float)(ballastColour >> 16 & 255) / 255.0F;
-        float g = (float)(ballastColour >> 8 & 255) / 255.0F;
-        float b = (float)(ballastColour & 255) / 255.0F;
-        GL11.glColor4f(r,g,b,1);
-    }
-
-    public static String[] SetupDynamicBallast(String ballast)
-    {
-        String[] ballastTexture = new String[2];
-
-        if (ballast.contains(":")) {
-            ballastTexture = ballast.split(":", 5);
-        }
-        else {
-            ballastTexture[0] = "minecraft";
-            ballastTexture[1] = ballast;
-        }
-
-        return ballastTexture;
-    }
-
 }
 

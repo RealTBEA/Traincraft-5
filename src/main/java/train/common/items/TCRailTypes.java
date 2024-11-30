@@ -18,7 +18,7 @@ public class TCRailTypes
         CURVED_SLOPE()
     }
 
-    public static boolean isStraightTrack(TileTCRail tile){
+    /*public static boolean isStraightTrack(TileTCRail tile){
         if (tile == null || tile.getRailType() == null)
             return false;
         else
@@ -58,6 +58,6 @@ public class TCRailTypes
         if (tile == null || tile.getRailType() == null)
             return false;
         return (tile.getRailType() == RailTypes.CURVED_SLOPE);
-    }
+    }*/
 
 }

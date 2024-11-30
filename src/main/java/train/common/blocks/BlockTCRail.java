@@ -17,7 +17,6 @@ import train.common.Traincraft;
 import train.common.items.ItemTCRail;
 import train.common.items.ItemWrench;
 import train.common.library.BlockIDs;
-import train.common.library.EnumTracks;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
@@ -130,9 +129,7 @@ public class BlockTCRail extends Block {
 		int l = world.getBlockMetadata(i, j, k);
 
 		if (!world.isRemote && te != null && (te instanceof TileTCRail)) {
-			if (player != null && player.inventory != null && player.inventory.getCurrentItem() != null &&
-                    (player.inventory.getCurrentItem().getItem() instanceof ItemWrench) && ((TileTCRail) te).getType() != null &&
-                    (((TileTCRail) te).getType().equals(EnumTracks.SMALL_STRAIGHT.getLabel()) || ((TileTCRail) te).getType().equals(EnumTracks.EMBEDDED_SMALL_STRAIGHT.getLabel()))) {
+			if (player != null && player.inventory != null && player.inventory.getCurrentItem() != null && (player.inventory.getCurrentItem().getItem() instanceof ItemWrench) && ((TileTCRail) te).getType() != null && ((TileTCRail) te).getType().equals(ItemTCRail.TrackTypes.SMALL_STRAIGHT.getLabel())) {
 				l++;
 				if (l > 3)
 					l = 0;

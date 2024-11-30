@@ -26,9 +26,7 @@ import train.common.api.EntityRollingStock;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
 import train.common.items.ItemTCRail;
-import train.common.items.TCRailTypes;
 import train.common.library.BlockIDs;
-import train.common.library.EnumTracks;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
@@ -455,16 +453,18 @@ public class BogiePathfinding  extends EntityMinecart implements IMinecart{
                     // if (ItemTCRail.isTCTurnTrack(tileRail)) moveOnTC90TurnRail(i, j, k,
                     // tileRail.r, tileRail.cx, tileRail.cy, tileRail.cz, tileRail.getType(), meta);
                 }
-                else if (ItemTCRail.isTCStraightTrack(tileRail)) {
+
+                if (ItemTCRail.isTCStraightTrack(tileRail)) {
 
                     moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
                 }
 
-                else if (TCRailTypes.isCrossingTrack(tileRail)) {
+                else if (ItemTCRail.isTCTwoWaysCrossingTrack(tileRail)) {
 
                     moveOnTCTwoWaysCrossing();
                 }
-                else if (TCRailTypes.isSlopeTrack(tileRail)) {
+
+                else if (ItemTCRail.isTCSlopeTrack(tileRail)) {
 
                     moveOnTCSlope(j, tileRail.xCoord, tileRail.zCoord, tileRail.slopeAngle, tileRail.slopeHeight, tileRail.getBlockMetadata());
                 }
@@ -528,7 +528,7 @@ public class BogiePathfinding  extends EntityMinecart implements IMinecart{
                     tileRail = (TileTCRail) tileEntity;
                 }
 
-            if (tileRail != null && TCRailTypes.isSwitchTrack(tileRail) && doSummon)  {
+            if (tileRail != null && ItemTCRail.isTCSwitch(tileRail)  && doSummon)  {
 
                 //copypasta ft
                 BogiePathfinding testBogie = new BogiePathfinding(worldObj, tileRail.linkedX , tileRail.linkedY, tileRail.linkedZ, 44455, 0, 4, at2Handler);
@@ -545,7 +545,7 @@ public class BogiePathfinding  extends EntityMinecart implements IMinecart{
                 }
 
                 doSummon = false;
-            } else if (tileRail != null && !TCRailTypes.isSwitchTrack(tileRail)) {
+            } else if (tileRail != null && !ItemTCRail.isTCSwitch(tileRail)) {
                 doSummon = true;
             }
 
@@ -571,7 +571,7 @@ public class BogiePathfinding  extends EntityMinecart implements IMinecart{
                 ForgeChunkManager.releaseTicket(chunkTicket);
                 this.setDead();
             }*/
-            if (tileRail != null && TCRailTypes.isSwitchTrack(tileRail) && summonedByTheGodsIMeanFromAnotherPathfinderBogie) {
+            if (tileRail != null && ItemTCRail.isTCSwitch(tileRail) && summonedByTheGodsIMeanFromAnotherPathfinderBogie) {
               //  tileRail.setSwitchState(true, true);
 
 
@@ -763,7 +763,10 @@ public class BogiePathfinding  extends EntityMinecart implements IMinecart{
     }
     private boolean shouldIgnoreSwitch(TileTCRail tile, int i, int j, int k, int meta) {
         if (tile != null
-                && TCRailTypes.isTurnTrack(tile)
+                && (tile.getType().equals(ItemTCRail.TrackTypes.MEDIUM_RIGHT_TURN.getLabel())
+                || tile.getType().equals(ItemTCRail.TrackTypes.MEDIUM_LEFT_TURN.getLabel())
+                || tile.getType().equals(ItemTCRail.TrackTypes.LARGE_LEFT_TURN.getLabel())
+                || tile.getType().equals(ItemTCRail.TrackTypes.LARGE_RIGHT_TURN.getLabel()))
                 && tile.canTypeBeModifiedBySwitch) {
             if (meta == 2) {
                 if (motionZ > 0 && Math.abs(motionX) < 0.01) {

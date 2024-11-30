@@ -8,10 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
-import train.common.items.RailVariants;
 import train.common.library.Info;
-
-import static train.common.items.RailVariants.EMBEDDED;
 
 @SideOnly(Side.CLIENT)
 public class ModelTwoWaysCrossingTCTrack extends ModelBase {
@@ -21,16 +18,15 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 		modelTwoWaysCrossing = net.minecraftforge.client.model.AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_x.obj"));
 	}
 
-	private void render() {
+	public void render() {
 		modelTwoWaysCrossing.renderAll();
 	}
 
-	public void render(RailVariants railVariants, double x, double y, double z) {
-		render(railVariants, x, y, z, 1, 1, 1, 1);
+	public void render(double x, double y, double z) {
+		render(x, y, z, 1, 1, 1, 1);
 	}
 
-	public void render(RailVariants variants, double x, double y, double z, float r, float g, float b, float a)
-	{
+	public void render(double x, double y, double z, float r, float g, float b, float a) {
 		// Push a blank matrix onto the stack
 		GL11.glPushMatrix();
 
@@ -38,16 +34,7 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
 		// Bind the texture, so that OpenGL properly textures our block.
-		switch (variants)
-		{
-			case EMBEDDED:
-				FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-				break;
-			default:
-				FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-				break;
-		}
-
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 

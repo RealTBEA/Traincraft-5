@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
-import train.common.items.RailVariants;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
@@ -49,14 +48,12 @@ public class ModelRightSwitchTCTrack extends ModelBase {
 	public void renderLarge90Inactive() {
 		modelLargeRightSwitchInactive.renderAll();
 	}
-
-	public void render(String type, TileTCRail tcRail, double x, double y, double z)
-	{
+	public void render(String type,TileTCRail tcRail, double x, double y, double z) {
 		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
-		render( type, tcRail.getTrackType().getVariant(), facing, tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
+		render( type, facing, tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
 	}
 
-	public void render(String type, RailVariants railVariant, int facing, boolean active, double x, double y, double z, float r, float g, float b, float a) {
+	public void render(String type, int facing, boolean active, double x, double y, double z, float r, float g, float b, float a) {
 		// Push a blank matrix onto the stack
 		GL11.glPushMatrix();
 
@@ -64,16 +61,7 @@ public class ModelRightSwitchTCTrack extends ModelBase {
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
 		// Bind the texture, so that OpenGL properly textures our block.
-		if (RailVariants.EMBEDDED.equals(railVariant))
-		{
-			tmt.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-		}
-		else
-		{
-			tmt.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-		}
-		// Push a blank matrix onto the stack
-
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 

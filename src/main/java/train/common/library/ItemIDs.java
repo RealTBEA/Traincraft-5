@@ -307,12 +307,12 @@ public enum ItemIDs {
 	tcRailSlopeWood("ItemTCRail", "item_rail_straight_slope_wood", 3),
 	tcRailSlopeGravel("ItemTCRail", "item_rail_straight_slope_gravel", 3),
 	tcRailSlopeBallast("ItemTCRail", "item_rail_straight_slope_ballast", 3),
-	tcRailSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),
+    /**tcRailSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),*/
 
 	tcRailLargeSlopeWood("ItemTCRail", "item_rail_straight_slope_wood", 3),
 	tcRailLargeSlopeGravel("ItemTCRail", "item_rail_straight_slope_gravel", 3),
 	tcRailLargeSlopeBallast("ItemTCRail", "item_rail_straight_slope_ballast", 3),
-	tcRailLargeSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),
+    /**tcRailLargeSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),*/
 
 	tcRailVeryLargeSlopeWood("ItemTCRail", "item_rail_straight_slope_wood", 3),
 	tcRailVeryLargeSlopeGravel("ItemTCRail", "item_rail_straight_slope_gravel", 3),
@@ -325,7 +325,7 @@ public enum ItemIDs {
 	tcRailSlopePeaGravel("ItemTCRail", "item_rail_straight_slope_pea_gravel", 3),
 	tcRailLargeSlopePeaGravel("ItemTCRail", "item_rail_straight_slope_pea_gravel", 3),
 	tcRailVeryLargeSlopePeaGravel("ItemTCRail", "item_rail_straight_slope_pea_gravel", 3),
-	tcRailVeryLargeSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),
+	/**tcRailVeryLargeSlopeDynamic("ItemTCRail", "item_rail_straight_slope_dynamic", 3),*/
 
 	tcRailSuperLargeTurn("ItemTCRail", "item_rail_tc_super_large_turn", 5),
 	tcRailVeryLongStraight("ItemTCRail", "item_rail_straight_very_large", 5),
@@ -336,7 +336,7 @@ public enum ItemIDs {
 	/**
 	 * Embedded Tracks
 	 */
-	tcRailEmbeddedSmallStraight("ItemTCRail", "item_rail_straight_embedded_small_", 5),
+	/**tcRailEmbeddedSmallStraight("ItemTCRail", "item_rail_straight_embedded_small_", 5),
 	tcRailEmbeddedMediumStraight("ItemTCRail", "item_rail_straight_embedded_medium", 5),
 	tcRailEmbeddedLongStraight("ItemTCRail", "item_rail_straight_embedded_large", 5),
 	tcRailEmbeddedVeryLongStraight("ItemTCRail", "item_rail_straight_embedded_very_large", 5),
@@ -386,12 +386,12 @@ public enum ItemIDs {
 
 	tcRailEmbeddedLargeCurvedSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_curved_large_dynamic", 3),
 	tcRailEmbeddedVeryLargeCurvedSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_curved_large_dynamic", 3),
-	tcRailEmbeddedSuperLargeCurvedSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_curved_large_dynamic", 3),
+	tcRailEmbeddedSuperLargeCurvedSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_curved_large_dynamic", 3),*/
 
 	tcRailSmallRoadCrossing("ItemTCRail", "item_rail_small_road_crossing", 5),
 	tcRailSmallRoadCrossing1("ItemTCRail", "item_rail_small_road_crossing_1", 5),
 	tcRailSmallRoadCrossing2("ItemTCRail", "item_rail_small_road_crossing_2", 5),
-	tcRailSmallRoadCrossingDynamic("ItemTCRail", "item_rail_small_road_crossing_dynamic", 5),
+	/**tcRailSmallRoadCrossingDynamic("ItemTCRail", "item_rail_small_road_crossing_dynamic", 5), */
 
 
 
