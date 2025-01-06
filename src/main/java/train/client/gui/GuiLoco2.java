@@ -207,7 +207,7 @@ public class GuiLoco2 extends GuiContainer {
 			case 4:
 				if (loco.isLocoTurnedOn())
 				{
-					if(loco.getSpeed() <= 1){
+					if(loco.getSpeed() <= 1 || loco.parkingBrake){
 						Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(false));
 						loco.isLocoTurnedOn = false;
 						guibutton.displayString = "Start Engine";
@@ -230,7 +230,7 @@ public class GuiLoco2 extends GuiContainer {
 			break;
 			case 5:
 				if (loco.isLocoTurnedOn()) {
-					if(loco.getSpeed() <= 1){
+					if(loco.getSpeed() <= 1 || loco.parkingBrake){
 						Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(false));
 						loco.isLocoTurnedOn = false;
 						guibutton.displayString = "Start Engine";
