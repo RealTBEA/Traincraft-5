@@ -1,12 +1,13 @@
 package train.common.tile.switchStand;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.api.blocks.TileSwitch;
 import train.common.blocks.TCBlocks;
 import train.common.blocks.switchStand.BlockOWOSwitchStand;
@@ -32,19 +33,20 @@ public class TileOWOSwitchStand extends TileSwitch {
         /**
          * Remove any block on top of the wind mill
          */
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-                    Block block = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+                BlockPos tempBlockPos = new BlockPos(this.getPos().getX(), this.getPos().getY() + 1,  this.getPos().getZ());
+                if (!this.world.isAirBlock(tempBlockPos)) {
+                    Block block = this.world.getBlockState(tempBlockPos).getBlock();
                     if (block != null) {
-                        EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(TCBlocks.owoSwitchStand), 1));
+                        EntityItem entityitem = new EntityItem(world, this.getPos().getX(), this.getPos().getY() + 1,  this.getPos().getZ(), new ItemStack(Item.getItemFromBlock(TCBlocks.owoSwitchStand), 1));
                         float f3 = 0.05F;
                         entityitem.motionX = (float) rand.nextGaussian() * f3;
                         entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                        worldObj.spawnEntityInWorld(entityitem);
+                        world.spawnEntity(entityitem);
                     }
-                    this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+                    this.world.setBlockToAir(this.getPos());
                 }
                 syncTileEntity();
             }
@@ -54,6 +56,6 @@ public class TileOWOSwitchStand extends TileSwitch {
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+        return new AxisAlignedBB(this.getPos().getX() - 1, this.getPos().getY() - 1, this.getPos().getZ() - 1, this.getPos().getX() + 2, this.getPos().getY() + 2, this.getPos().getZ() + 2);
     }
 }
