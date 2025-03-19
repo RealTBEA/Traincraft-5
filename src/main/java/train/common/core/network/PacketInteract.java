@@ -1,6 +1,6 @@
 package train.common.core.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -11,10 +11,12 @@ import train.common.api.AbstractTrains;
 /**
  * <h1>Mount packet</h1>
  * This is intended to be a replacement for
- * @see net.minecraft.network.play.client.C02PacketUseEntity
  * because for whatever reason, the stupid thing refuses to send for our entities.
  * @author Eternal Blue Flame
  */
+
+// Commenting out to get rid of warning for the time being
+// * @see net.minecraft.network.play.client.C02PacketUseEntity
 public class PacketInteract implements IMessage {
     /**the ID of the entity to dismount from*/
     private int entityId, dimensionId, playerId;
@@ -22,8 +24,8 @@ public class PacketInteract implements IMessage {
     public PacketInteract() {}
     public PacketInteract(int entityId) {
         this.entityId = entityId;
-        this.dimensionId= Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId;
-        this.playerId=Minecraft.getMinecraft().thePlayer.getEntityId();
+        this.dimensionId= Minecraft.getMinecraft().player.world.provider.getDimension();
+        this.playerId=Minecraft.getMinecraft().player.getEntityId();
 
     }
     /**reads the packet on server to get the variables from the Byte Buffer*/
@@ -35,7 +37,7 @@ public class PacketInteract implements IMessage {
         Entity e = DimensionManager.getWorld(dimensionId).getEntityByID(entityId);
         Entity p = DimensionManager.getWorld(dimensionId).getEntityByID(playerId);
         if (e instanceof AbstractTrains && p instanceof EntityPlayer) {
-            e.interactFirst((EntityPlayer)p);
+            e.processInitialInteract(((EntityPlayer) p), ((EntityPlayer) p).getActiveHand());
         }
     }
     /**puts the variables into a Byte Buffer so they can be sent to server*/

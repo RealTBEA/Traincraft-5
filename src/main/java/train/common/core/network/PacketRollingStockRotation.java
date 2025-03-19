@@ -1,8 +1,8 @@
 package train.common.core.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -68,8 +68,8 @@ public class PacketRollingStockRotation implements IMessage {
         @Override
         public IMessage onMessage(PacketRollingStockRotation message, MessageContext context) {
             Minecraft mc = Minecraft.getMinecraft();
-            if (mc.theWorld != null) {
-                Entity entity = mc.theWorld.getEntityByID(message.entityID);
+            if (mc.world != null) {
+                Entity entity = mc.world.getEntityByID(message.entityID);
                 if (entity instanceof EntityRollingStock) {
                     EntityRollingStock rollingStock = (EntityRollingStock) entity;
                     rollingStock.rotationYaw = message.rotationYawServer;

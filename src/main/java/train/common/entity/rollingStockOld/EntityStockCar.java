@@ -42,7 +42,7 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 		}
 		if (!getWorld().isRemote) {
 			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+				getPassengers().get(0).startRiding(this);
 				return true;
 			}
 		}

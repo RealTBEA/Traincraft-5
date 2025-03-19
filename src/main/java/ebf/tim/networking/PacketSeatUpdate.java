@@ -1,9 +1,10 @@
 package ebf.tim.networking;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
@@ -57,18 +58,18 @@ public class PacketSeatUpdate implements IMessage {
             EntitySeat oldSeat;
             EntitySeat newSeat;
             if (ctx.side == Side.SERVER) {
-                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.rollingStockId);
-                playerEntity = (EntityPlayer) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerId);
+                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().player.world.getEntityByID(message.rollingStockId);
+                playerEntity = (EntityPlayer) ctx.getServerHandler().player.world.getEntityByID(message.playerId);
 
             } else {
-                rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().theWorld.getEntityByID(message.rollingStockId);
-                playerEntity = (EntityPlayer) Minecraft.getMinecraft().theWorld.getEntityByID(message.playerId);
+                rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().world.getEntityByID(message.rollingStockId);
+                playerEntity = (EntityPlayer) Minecraft.getMinecraft().world.getEntityByID(message.playerId);
             }
             oldSeat = rollingStockEntity.seats.get(message.oldSeatIndex);
             newSeat = rollingStockEntity.seats.get(message.newSeatIndex);
             oldSeat.removePassenger(playerEntity);
             newSeat.addPassenger(playerEntity);
-            playerEntity.mountEntity(newSeat);
+            playerEntity .startRiding(newSeat);
             if (ctx.side == Side.SERVER) {
                 Traincraft.updateChannel.sendToAllAround(new PacketSeatUpdate(message.rollingStockId,message.playerId,message.oldSeatIndex,message.newSeatIndex, message.dimension),
                         new NetworkRegistry.TargetPoint(message.dimension,rollingStockEntity.posX,rollingStockEntity.posY,rollingStockEntity.posZ,256D));
