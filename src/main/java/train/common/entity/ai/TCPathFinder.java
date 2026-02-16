@@ -37,7 +37,7 @@ public class TCPathFinder extends PathFinder {
                 for (int k = z; k < z + point.zCoord; ++k) {
                     Block block = entity.worldObj.getBlock(i, j, k);
 
-                    if (block.getMaterial() != Material.air && !(block instanceof BlockTCRail) && !(block instanceof BlockTCRailGag)) {
+                    if (block.getMaterial() != Material.air) {
                         if (block == Blocks.trapdoor) {
                             flag3 = true;
                         } else if (block != Blocks.flowing_water && block != Blocks.water) {
@@ -53,6 +53,9 @@ public class TCPathFinder extends PathFinder {
                         }
 
                         int k1 = block.getRenderType();
+                        if(block instanceof BlockTCRail || block instanceof BlockTCRailGag){
+                            k1=9;
+                        }
 
                         if (entity.worldObj.getBlock(i, j, k).getRenderType() == 9) {
                             int j2 = MathHelper.floor_double(entity.posX);

@@ -1029,8 +1029,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
     public void finalMove(EntityRollingStock stock){
-
-        //todo: test based on doing it whether or nt it's moved, in theory, we should skip if the other !has_moved
         if(stock.frontLink instanceof EntityRollingStock &&stock.frontLink.hasMoved) {
             stock.manageLink((EntityRollingStock) stock.frontLink);
         }
@@ -1109,7 +1107,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
 
-        if(!isAccelerating() && !isAccelerating()) {
+        if(!isAccelerating()) {
             bogieFront.drag(this, drag);
             bogieBack.drag(this, drag);
         }

@@ -252,7 +252,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 
 			if (goStraight) {
-				moveOnTCStraight(j, meta);
+				moveOnTCStraight(j, Math.abs(vx)>Math.abs(vz)?1:2);
 			} else {
 				moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
 			}
@@ -500,7 +500,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			yFloor = CommonUtil.floorDouble(this.posY);
 			zFloor = CommonUtil.floorDouble(this.posZ);
 			//prevent moving without velocity
-			if (Math.abs(velocity[0]) + Math.abs(velocity[1] + Math.abs(velocity[2]) + Math.abs(velocity[3])) < 0.0000001) {
+			if (Math.abs(velocity[0]) + Math.abs(velocity[1] + Math.abs(velocity[2]) + Math.abs(velocity[3])) ==0) {
 				return;
 			}
 
