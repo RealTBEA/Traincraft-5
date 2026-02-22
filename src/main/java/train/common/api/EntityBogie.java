@@ -544,7 +544,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//move on rails
 			if (l instanceof BlockRailBase) {
 				this.yOffset=0.3425f;
-				loopVanilla(host, Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]), (BlockRailBase) l);
+				loopVanilla(host, Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2)), (BlockRailBase) l);
 			} else if (l instanceof BlockTCRail || l instanceof BlockTCRailGag){
 				this.yOffset=0.425f;
 				moveOnTCRail(xFloor, yFloor, zFloor, l);
@@ -626,6 +626,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		railPathX = (martix[railMetadata][2][0]);
 		railPathZ = (martix[railMetadata][2][1]);
 
+		railPathX = Math.copySign(Math.sqrt(Math.abs(railPathX)),railPathX);
+		railPathZ = Math.copySign(Math.sqrt(Math.abs(railPathZ)),railPathZ);
+
 		//cover moving reverse of track direction using the rotation from the closed loop rather than the full motion
 		if((velocity[0]+velocity[2]) * railPathX + (velocity[1]+velocity[3]) * railPathZ <= 0.0D) {
 			railPathX = -railPathX;
@@ -634,15 +637,15 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		setPositionRelative((currentMotion * railPathX), 0, (currentMotion * railPathZ));
 
-		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2));
 		velocity[0] = (float)(motionSqrt * railPathX);
 		velocity[1] = (float)(motionSqrt * railPathZ);
 
-		motionSqrt = Math.abs(velocity[2])+Math.abs(velocity[3]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
 		velocity[2] = (float)(motionSqrt * railPathX);
 		velocity[3] = (float)(motionSqrt * railPathZ);
 
-		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
 
 		//define the rail path again, to center the transport.
 		railPathX2 = xFloor + 0.5D + martix[railMetadata][0][0];

@@ -1061,15 +1061,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    @Override
     public void applyDrag() {
-        float drag = 0.9998f, brakeBuff = 0;
-        //check if lope things can be done at all
+        float drag = 0.98f, brakeBuff = 0;
+        //If an active loco is linked, don't apply a constant drag
+        boolean activeLocoLinked = false;
         for(AbstractTrains stock : consist) {
-            if(stock!=this && stock.isLocoTurnedOn){
-                return;
-            } else if(stock ==this && isAccelerating()){
-                return;
+            if(stock.isLocoTurnedOn){
+                activeLocoLinked = true;
+                drag = 1f;
+                break;
             }
         }
         if (isBraking) {
@@ -1100,12 +1100,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
-        if (drag > 0.9999f) {
-            drag = 0.9999f;
-        } else if (drag < 0f) {
-            drag = 0f;
-        }
-
+        drag = Math.max(0, Math.min(0.9999f, drag));
 
         if(!isAccelerating()) {
             bogieFront.drag(this, drag);
@@ -1497,22 +1492,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @Override
     public boolean shouldDoRailFunctions() {
         return true;
-    }
-
-    protected void applyDragAndPushForces() {
-        motionX *= getDragAir();
-        motionY *= 0.0D;
-        motionZ *= getDragAir();
-    }
-
-    /**
-     * Carts should return their drag factor here
-     *
-     * @return The drag rate.
-     */
-    @Override
-    public double getDragAir() {
-        return isAccelerating()?1D:0.9998D;
     }
 
     @Override

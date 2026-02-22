@@ -106,7 +106,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     /**
      * These variables are used to display changes in the GUI
      */
-    public int currentNumCartsPulled = 0;
     public double currentMassPulled = 0;
     public double currentSpeedSlowDown = 0;
     public double currentAccelSlowDown = 0;
@@ -1065,11 +1064,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
     public String guiDetailsJSON() {
         JsonObject gui = new JsonObject();
-        gui.addProperty("cartsPulled", currentNumCartsPulled);
-        gui.addProperty("massPulled", currentMassPulled);
+        gui.addProperty("cartsPulled", consist.size()-1);
+        gui.addProperty("massPulled", pullingWeight);
         gui.addProperty("slowDown", Math.round(currentSpeedSlowDown));
-        gui.addProperty("accelSlowDown", currentAccelSlowDown);
-        gui.addProperty("brakeSlowDown", currentBrakeSlowDown);
+        gui.addProperty("accelSlowDown", (double)Math.round(currentAccelSlowDown*1000)/1000);
+        gui.addProperty("brakeSlowDown", (double)Math.round(currentBrakeSlowDown*1000)/1000);
         gui.addProperty("fuelUseChange", currentFuelConsumptionChange);
         return gui.toString();
     }
