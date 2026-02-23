@@ -11,23 +11,17 @@ public class HandleMaxAttachedCarts {
      * Handles the debuffs from attached stocks to a Locomotive's speed, brake, accel and fuel rate
      */
     public static void PullPhysic(Locomotive Loco) {
-        if (Loco.train == null) // Exit if Loco isn't fully init on level start
-            return;
 
         // Guarantee non-zero values
-        Loco.currentMassPulled = Math.max(Loco.weightKg(),1);
+        Loco.currentMassPulled = (Loco.pullingWeight > 0 ? Loco.pullingWeight : 1) * 0.07457;
         double totalMhp = Loco.transportMetricHorsePower() > 0 ? Loco.transportMetricHorsePower() : 100;
 
-        // Append attached stock mass and passive locos Mhp
-        for (AbstractTrains stock : Loco.train.getTrains()) {
-            if (stock.uniqueID != Loco.uniqueID) {
-                Loco.currentMassPulled += stock.weightKg();
-                if (stock instanceof Locomotive) {
-                    totalMhp += stock.transportMetricHorsePower();
-                }
+        // Append passive locos Mhp
+        for (AbstractTrains stock : Loco.consist) {
+            if (stock instanceof Locomotive && stock.uniqueID != Loco.uniqueID) {
+                totalMhp += stock.transportMetricHorsePower();
             }
         }
-        Loco.currentMassPulled *= 0.07457;
 
         // Debuffs
         Loco.currentSpeedSlowDown = Loco.currentMassPulled / totalMhp * 74.57;
@@ -36,9 +30,9 @@ public class HandleMaxAttachedCarts {
         Loco.currentFuelConsumptionChange = Loco.currentBrakeSlowDown * 100;
 
         // Get the defaults, then scale them
-        Loco.setCustomSpeed(        Loco.getMaxSpeed()          - Loco.currentSpeedSlowDown);
-        Loco.setBrake(Math.min(     Loco.setBrake(0)            + Loco.currentBrakeSlowDown,0.998));  // Avoid Brake > 1 (acceleration)
-        Loco.setAccel(              Loco.setAccel(0)            - Loco.currentAccelSlowDown);
-        Loco.setFuelConsumption(    Loco.setFuelConsumption(0)  - (int)Loco.currentFuelConsumptionChange);
+        Loco.setCustomSpeed(Math.max(   Loco.getMaxSpeed()              - Loco.currentSpeedSlowDown,0));        // Avoid Speed < 0
+        Loco.setBrake(Math.min(         Loco.getSpecBrake()             + Loco.currentBrakeSlowDown,0.998));    // Avoid Brake > 1 (acceleration)
+        Loco.setAccel(Math.max(         Loco.getSpecAccel()             - Loco.currentAccelSlowDown,0));        // Avoid Accel < 0 (braking)
+        Loco.setFuelConsumption(        Loco.getSpecFuelConsumption()   - (int)Loco.currentFuelConsumptionChange);
     }
 }

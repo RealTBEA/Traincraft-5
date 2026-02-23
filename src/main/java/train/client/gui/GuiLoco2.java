@@ -442,13 +442,14 @@ public class GuiLoco2 extends GuiContainer {
         fontRendererObj.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Accel reduction: " + guiDetails.get("accelSlowDown"), 1, 40, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Brake reduction: " + guiDetails.get("brakeSlowDown"), 1, 50, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel consumption: " + ((loco.getFuelConsumption() * 0.2) + "").substring(0, Math.min(((loco.getFuelConsumption() * 0.2) + "").length(), 4)) + " mB/s", 1,
-                60, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 70, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 1, 90, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 100, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + guiDetails.get("slowDown").getAsFloat()) + "km/h)", 1, 110, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Destination: " + (loco.getDestinationGUI()), 1, 120, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Fuel increase: " + guiDetails.get("fuelUseChange"), 1, 60, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Fuel base consumption: " + ((loco.getFuelConsumption() * 0.2) + "").substring(0, Math.min(((loco.getFuelConsumption() * 0.2) + "").length(), 4)) + " mB/s", 1,
+                70, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 80, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 90, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 1, 100, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 110, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + guiDetails.get("slowDown").getAsFloat()) + "km/h)", 1, 120, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Destination: " + (loco.getDestinationGUI()), 1, 130, 0xFFFFFF);
     }
 }

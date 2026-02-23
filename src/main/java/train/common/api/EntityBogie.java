@@ -215,7 +215,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	private void moveOnTCRail(int i, int j, int k, Block l) {
-		limitSpeedOnTCRail();
 
 		if(l instanceof BlockTCRail) {
 			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
@@ -437,25 +436,19 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		velocity[1] = Math.copySign(norm_cpx * motionSqrt, railPathZ2);
 	}
 
-	private void limitSpeedOnTCRail() {
-		double maxSpeed = Math.min(3.0D, getMaxCartSpeedOnRail());
+	private void limitSpeed(AbstractTrains host, double speedMagnitude) {
 
-		if (this.motionX < -maxSpeed) {
-
-			this.motionX = -maxSpeed;
-		}
-		else if (this.motionX > maxSpeed) {
-
-			this.motionX = maxSpeed;
+		// Default speed for most carts
+		double maxSpeed = this.getMaxCartSpeedOnRail();
+		// Current max speed for locos
+		if (host instanceof Locomotive) {
+			maxSpeed = Math.min(maxSpeed,SpeedHandler.convertSpeed((double)((Locomotive)host).getCurrentMaxSpeed()));
 		}
 
-		if (this.motionZ < -maxSpeed) {
-
-			this.motionZ = -maxSpeed;
-		}
-		else if (this.motionZ > maxSpeed) {
-
-			this.motionZ = maxSpeed;
+		if (speedMagnitude > maxSpeed) {
+			double overspeedFactor = speedMagnitude/maxSpeed;
+			velocity[0] /= overspeedFactor;
+			velocity[1] /= overspeedFactor;
 		}
 	}
 
@@ -539,12 +532,12 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				oldBlockZ=zFloor;
 			}
 
-
-
 			//move on rails
+			double speedMagnitude = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
+			limitSpeed(host, speedMagnitude);
 			if (l instanceof BlockRailBase) {
 				this.yOffset=0.3425f;
-				loopVanilla(host, Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2)), (BlockRailBase) l);
+				loopVanilla(host, speedMagnitude, (BlockRailBase) l);
 			} else if (l instanceof BlockTCRail || l instanceof BlockTCRailGag){
 				this.yOffset=0.425f;
 				moveOnTCRail(xFloor, yFloor, zFloor, l);

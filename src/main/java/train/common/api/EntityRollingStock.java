@@ -84,7 +84,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     protected EntityPlayer playerEntity;
 
-    public float maxSpeed;
     public double speedLimiter = 1;
 
     public ItemStack item;
@@ -644,7 +643,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.rollingPitch=par8;
     }
 
-    List list = null;
+
     Block l;
 
 
@@ -809,7 +808,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * backLink will be updated accordingly
          */
         if (addedToChunk && ((this.frontLink == null && this.Link1 != 0) || (this.backLink == null && this.Link2 != 0))) {
-            list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
+            List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
 
             if (list != null && list.size() > 0) {
                 for (Object entity : list) {
@@ -1094,10 +1093,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f)); //we don't know what 4.448 does
         }
 
-        //add in the drag from combined weight, plus brakes.
-        if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
-            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 1000; //was 4448, no idea. Just adjusted until something felt nice
-        }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
         drag = Math.max(0, Math.min(0.9999f, drag));
@@ -1111,7 +1106,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public float getFriction(){return 0.15f;}
 
-    public double getAccelerator(){return accelerate;}
+    //public double getAccelerator(){return accelerate;}
 
 
     public float getVelocity(){
@@ -1500,17 +1495,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
 
-    /**
-     * Returns the carts max speed. Carts going faster than 1.1 cause issues
-     * with chunk loading. This value is compared with the rails max speed to determine
-     * the carts current max speed. A normal rails max speed is 0.4.
-     *
-     * @return Carts max speed.
-     */
-    @Override
-    public float getMaxCartSpeedOnRail() {
-        return maxSpeed;
-    }
 
     @Override
     public float getMaxSpeedAirLateral() {
