@@ -1092,8 +1092,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
         drag = Math.max(0, Math.min(0.9999f, drag));
 
-        bogieFront.drag(this, drag);
-        bogieBack.drag(this, drag);
+        bogieFront.multiplyVelocity(drag);
+        bogieBack.multiplyVelocity(drag);
     }
 
     public float getFriction(){return 0.15f;}
@@ -1294,16 +1294,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (train.backLink != null && last.backLink != null
                     && last == train.backLink
                     && train == last.backLink) {
-                train.bogieBack.multiplyVelocity(train, -vel);
-                train.bogieFront.multiplyVelocity(train, -vel);
+                train.bogieBack.multiplyVelocity(-vel);
+                train.bogieFront.multiplyVelocity(-vel);
             } else if (train.frontLink != null && last.frontLink != null
                     && last == train.frontLink
                     && train == last.frontLink) {
-                train.bogieBack.multiplyVelocity(train, -vel);
-                train.bogieFront.multiplyVelocity(train, -vel);
+                train.bogieBack.multiplyVelocity(-vel);
+                train.bogieFront.multiplyVelocity(-vel);
             } else {
-                train.bogieBack.multiplyVelocity(train, vel);
-                train.bogieFront.multiplyVelocity(train, vel);
+                train.bogieBack.multiplyVelocity(vel);
+                train.bogieFront.multiplyVelocity(vel);
             }
         }
     }

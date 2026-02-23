@@ -458,31 +458,32 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return  this.entityMainTrain.getOwner();
 	}
 
+	/*
+	 * Velocity needs to be added relative to each bogie's current rotation to prevent drifting between them, as the host's rotation doesn't match when entering curves.
+	 * Always adding in the direction of existing movement prevents reverse, and is unpredictable with null starting velocity, so we compare the bogie's rotation to the host's.
+	 */
 	public void addVelocity(AbstractTrains host, double speed) {
-		//cache rotation so it only has to be processed once per tick
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-		velocity[0] += speed * vec.xCoord;
-		velocity[1] += speed * vec.zCoord;
+		Vec3f bogieRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+(float)Math.toDegrees(Math.atan2(velocity[1], velocity[0])),0);
+		Vec3f hostRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
+		int direction = bogieRotation.dotProduct(hostRotation) >= 0 ? 1 : -1;
+
+		velocity[0] += speed * bogieRotation.xCoord * direction;
+		velocity[1] += speed * bogieRotation.zCoord * direction;
 	}
 
-	public void multiplyVelocity(AbstractTrains host, double mult) {
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-		velocity[0] *= (mult * vec.xCoord);
-		velocity[1] *= (mult * vec.zCoord);
+	public void multiplyVelocity(double mult) {
+		velocity[0] *= mult;
+		velocity[1] *= mult;
 	}
 
 	public void addLinking(AbstractTrains host, double speed){
-		//cache rotation so it only has to be processed once per tick
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-		velocity[2]+=speed*vec.xCoord;
-		velocity[3]+=speed*vec.zCoord;
-	}
+		Vec3f bogieRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+(float)Math.toDegrees(Math.atan2(velocity[1], velocity[0])),0);
+		Vec3f hostRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
+		int direction = bogieRotation.dotProduct(hostRotation) >= 0 ? 1 : -1;
 
-	public void drag(AbstractTrains host, double drag){
-		velocity[0]*=drag;
-		velocity[1]*=drag;
+		velocity[2] += speed * bogieRotation.xCoord * direction;
+		velocity[3] += speed * bogieRotation.zCoord * direction;
 	}
-
 
 	public World getWorld(){return worldObj;}
 
