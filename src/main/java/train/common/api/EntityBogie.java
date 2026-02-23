@@ -533,6 +533,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 
 			//move on rails
+			isOnRail = true;
 			double speedMagnitude = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
 			limitSpeed(host, speedMagnitude);
 			if (l instanceof BlockRailBase) {
@@ -546,6 +547,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				yFloor++;
 				posX+=(velocity[2]+velocity[0])*0.5;
 				posZ+=(velocity[3]+velocity[1])*0.5;
+				isOnRail = false;
 			}
 			velocity[2]=0;velocity[3]=0;
 		}

@@ -1061,19 +1061,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     public void applyDrag() {
-        float drag = 0.98f, brakeBuff = 0;
+        float drag = 0.98f; float derailSlipFactor = 0.175f;
         //If an active loco is linked, don't apply a constant drag
-        boolean activeLocoLinked = false;
         for(AbstractTrains stock : consist) {
             if(stock.isLocoTurnedOn){
-                activeLocoLinked = true;
                 drag = 1f;
                 break;
             }
-        }
-        if (isBraking) {
-            //realistically would be more like 2.4, but 5 makes gameplay more dramatic
-            brakeBuff += weightKg() * 3.0f;
         }
         if(ConfigHandler.ENABLE_SLOPE_ACCELERATION) {
             if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
@@ -1084,12 +1078,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
 
-        //now do drag stuff
-
-        //scale drag for derail, or air lateral friction. if you do both at the same time then it's way too much.
-        if(derail){
-            drag*=CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness;
-        } else if (cachedVectors[2].yCoord > 0) {
+        //Derailed drag (sum up off-rail bogies and scale based on slipperiness of block below)
+        float bogiesOffRail = derail ? 1f : (bogieBack.isOnRail?0f:0.5f) + (bogieFront.isOnRail?0f:0.5f);
+        if(bogiesOffRail > 0) {
+            drag *= 1 - bogiesOffRail * derailSlipFactor * (1 - CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness);
+        }
+        //Lateral friction drag. If you do both at the same time then it's way too much.
+        else if (cachedVectors[2].yCoord > 0) {
             drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f)); //we don't know what 4.448 does
         }
 
@@ -1097,11 +1092,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
         drag = Math.max(0, Math.min(0.9999f, drag));
 
-        if(!isAccelerating()) {
-            bogieFront.drag(this, drag);
-            bogieBack.drag(this, drag);
-        }
-
+        bogieFront.drag(this, drag);
+        bogieBack.drag(this, drag);
     }
 
     public float getFriction(){return 0.15f;}
