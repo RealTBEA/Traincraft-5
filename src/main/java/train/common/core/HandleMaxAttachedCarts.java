@@ -12,9 +12,8 @@ public class HandleMaxAttachedCarts {
      */
     public static void PullPhysic(Locomotive Loco) {
 
-        // Guarantee non-zero values
-        Loco.currentMassPulled = (Loco.pullingWeight > 0 ? Loco.pullingWeight : 1) * 0.07457;
-        double totalMhp = Loco.transportMetricHorsePower() > 0 ? Loco.transportMetricHorsePower() : 100;
+        Loco.currentMassPulled = Loco.pullingWeight * 0.07457;
+        double totalMhp = Loco.transportMetricHorsePower() > 0 ? Loco.transportMetricHorsePower() : 100;    // Guarantee non-zero so we don't divide by zero
 
         // Append passive locos Mhp
         for (AbstractTrains stock : Loco.consist) {

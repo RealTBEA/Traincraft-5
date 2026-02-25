@@ -476,13 +476,13 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		velocity[1] *= mult;
 	}
 
-	public void addLinking(AbstractTrains host, double speed){
+	public void setVelocity(AbstractTrains host, double speed){
 		Vec3f bogieRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+(float)Math.toDegrees(Math.atan2(velocity[1], velocity[0])),0);
 		Vec3f hostRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
 		int direction = bogieRotation.dotProduct(hostRotation) >= 0 ? 1 : -1;
 
-		velocity[2] += speed * bogieRotation.xCoord * direction;
-		velocity[3] += speed * bogieRotation.zCoord * direction;
+		velocity[0] = speed * bogieRotation.xCoord * direction;
+		velocity[1] = speed * bogieRotation.zCoord * direction;
 	}
 
 	public World getWorld(){return worldObj;}

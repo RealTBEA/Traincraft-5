@@ -13,6 +13,7 @@ import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
+import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.CartTools;
@@ -992,47 +993,44 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.addVelocity(this, velocity);
     }
 
-    public void addLinkingMove(double velocity){
-        bogieBack.addLinking(this, velocity);
-        bogieFront.addLinking(this, velocity);
+    public void setVelocity(double velocity) {
+        bogieBack.setVelocity(this, velocity);
+        bogieFront.setVelocity(this, velocity);
     }
-    public void manageLink(EntityRollingStock other) {
-        if(isLocoTurnedOn || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
-            return;
+
+    public double manageLink(EntityRollingStock other) {
+        if (isBraking || other.bogieBack == null || other.bogieFront == null || bogieBack == null || bogieFront == null) {
+            return 0d;
+        }
+
+        // Locos that are not set to be pulled don't receive link movement
+        if (this instanceof Locomotive) {
+            if (!((Locomotive) this).canBePulled) {
+                return 0d;
+            }
         }
 
         double vecX = other.posX - posX;
         double vecZ = other.posZ - posZ;
 
-
-        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
-                -(getOptimalDistance(other)+other.getOptimalDistance(this));
-
-        if (springDist<0.1){
-            springDist*=0.1;
-        } else if(springDist<0.5) {
-            springDist*=0.3;
-        } else {
-            springDist*=0.49;
-        }
-        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
-            springDist *= -1;
-        }
-
-        if(Math.abs(springDist)>0.01) {
-            addLinkingMove(springDist);
-        }
+        return MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ) - (getOptimalDistance(other)+other.getOptimalDistance(this));
     }
 
     /**
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
-    public void finalMove(EntityRollingStock stock){
-        if(stock.frontLink instanceof EntityRollingStock &&stock.frontLink.hasMoved) {
-            stock.manageLink((EntityRollingStock) stock.frontLink);
+    public void finalMove(EntityRollingStock stock) {
+        double activeSpring = 0.5d; double passiveSpring = 0.25d;
+        double springDist = 0d;
+        int pullingDir = stock.pullingLocomotiveDirection();
+        if (stock.frontLink instanceof EntityRollingStock && stock.frontLink.hasMoved) {
+            springDist += stock.manageLink((EntityRollingStock) stock.frontLink) * (pullingDir == 1 ? activeSpring : (pullingDir == -1 ? 0 : passiveSpring));
         }
-        if(stock.backLink instanceof EntityRollingStock && stock.backLink.hasMoved){
-            stock.manageLink((EntityRollingStock) stock.backLink);
+        if (stock.backLink instanceof EntityRollingStock && stock.backLink.hasMoved) {
+            springDist -= stock.manageLink((EntityRollingStock) stock.backLink) * (pullingDir == -1 ? activeSpring : (pullingDir == 1 ? 0 : passiveSpring));
+        }
+        if (springDist != 0d) {
+            stock.setVelocity(springDist);
         }
 
         stock.applyDrag();
