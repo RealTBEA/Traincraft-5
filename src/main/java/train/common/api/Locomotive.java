@@ -106,7 +106,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     /**
      * These variables are used to display changes in the GUI
      */
-    public int currentNumCartsPulled = 0;
     public double currentMassPulled = 0;
     public double currentSpeedSlowDown = 0;
     public double currentAccelSlowDown = 0;
@@ -128,7 +127,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public Locomotive(World world) {
         super(world);
         if(world==null){return;}
-        setFuelConsumption(0);
+        setFuelConsumption(getSpecFuelConsumption());
         dataWatcher.addObject(2, 0);
         this.setDefaultMass(0);
         this.setCustomSpeed(transportTopSpeed());
@@ -141,8 +140,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         dataWatcher.addObject(28, lightingDetailsJSONString());
 
         //dataWatcher.addObject(32, lineWaypoints);
-        setAccel(0);
-        setBrake(0);
+        setAccel(getSpecAccel());
+        setBrake(getSpecBrake());
         this.entityCollisionReduction = 0.99F;
         if (this instanceof SteamTrain) isLocoTurnedOn = true;
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
@@ -293,10 +292,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (c != 0) {
             return fuelRate = c;
         }
-        return fuelRate = setFuelConsumption();
+        return fuelRate = getSpecFuelConsumption();
 
     }
-    public int setFuelConsumption() {
+    public int getSpecFuelConsumption() {
         return getSpec()==null?80:getSpec().getFuelConsumption();
     }
 
@@ -323,10 +322,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     updateLinks();
                 }
             }
-            return accelerate = setAccel();
+            return accelerate = getSpecAccel();
         }
     }
-    public double setAccel() {
+    public double getSpecAccel() {
         return getSpec()==null?0.4:getSpec().getAccelerationRate();
     }
 
@@ -339,11 +338,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (rate != 0) {
             return brake = rate;
         } else {
-            return brake = setBrake();
+            return brake = getSpecBrake();
         }
     }
 
-    public double setBrake() {
+    public double getSpecBrake() {
         return getSpec()==null?0.97:getSpec().getBrakeRate();
     }
 
@@ -571,19 +570,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     }
 
     public float transportTopSpeed(){return getSpec().getMaxSpeed();}
-
-    private double convertSpeed(double speed) {
-        if (ConfigHandler.REAL_TRAIN_SPEED) {
-            speed *= 2;// applying ratio
-        } else {
-            speed *= 6;
-        }
-        speed *= 36;
-        //speed *= 10;// convert in ms
-        //speed *= 6;// applying ratio
-        //speed *= 3.6;// convert in km/h
-        return speed;
-    }
 
     public void soundHorn() {
         if(soundHorn==null){
@@ -901,7 +887,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
         super.onUpdate();
         if (!worldObj.isRemote) {
-            dataWatcher.updateObject(25, (int)Math.round(convertSpeed(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
+            dataWatcher.updateObject(25, (int)Math.round(SpeedHandler.convertSpeedInv(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
             dataWatcher.updateObject(24, fuelTrain);
             dataWatcher.updateObject(20, overheatLevel);
             dataWatcher.updateObject(23, locoState);
@@ -1065,12 +1051,12 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
     public String guiDetailsJSON() {
         JsonObject gui = new JsonObject();
-        gui.addProperty("cartsPulled", currentNumCartsPulled);
+        gui.addProperty("cartsPulled", consist.size()-1);
         gui.addProperty("massPulled", currentMassPulled);
         gui.addProperty("slowDown", Math.round(currentSpeedSlowDown));
-        gui.addProperty("accelSlowDown", currentAccelSlowDown);
-        gui.addProperty("brakeSlowDown", currentBrakeSlowDown);
-        gui.addProperty("fuelUseChange", currentFuelConsumptionChange);
+        gui.addProperty("accelSlowDown", (double)Math.round(currentAccelSlowDown*1000)/1000);
+        gui.addProperty("brakeSlowDown", (double)Math.round(currentBrakeSlowDown*1000)/1000);
+        gui.addProperty("fuelUseChange", (double)Math.round(currentFuelConsumptionChange*1000)/1000);
         return gui.toString();
     }
 

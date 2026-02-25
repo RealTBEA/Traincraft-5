@@ -13,6 +13,7 @@ import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
+import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.CartTools;
@@ -84,7 +85,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     protected EntityPlayer playerEntity;
 
-    public float maxSpeed;
     public double speedLimiter = 1;
 
     public ItemStack item;
@@ -644,7 +644,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.rollingPitch=par8;
     }
 
-    List list = null;
+
     Block l;
 
 
@@ -809,7 +809,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * backLink will be updated accordingly
          */
         if (addedToChunk && ((this.frontLink == null && this.Link1 != 0) || (this.backLink == null && this.Link2 != 0))) {
-            list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
+            List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
 
             if (list != null && list.size() > 0) {
                 for (Object entity : list) {
@@ -993,47 +993,44 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.addVelocity(this, velocity);
     }
 
-    public void addLinkingMove(double velocity){
-        bogieBack.addLinking(this, velocity);
-        bogieFront.addLinking(this, velocity);
+    public void setVelocity(double velocity) {
+        bogieBack.setVelocity(this, velocity);
+        bogieFront.setVelocity(this, velocity);
     }
-    public void manageLink(EntityRollingStock other) {
-        if(isLocoTurnedOn || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
-            return;
+
+    public double manageLink(EntityRollingStock other) {
+        if (isBraking || other.bogieBack == null || other.bogieFront == null || bogieBack == null || bogieFront == null) {
+            return 0d;
+        }
+
+        // Locos that are not set to be pulled don't receive link movement
+        if (this instanceof Locomotive) {
+            if (!((Locomotive) this).canBePulled) {
+                return 0d;
+            }
         }
 
         double vecX = other.posX - posX;
         double vecZ = other.posZ - posZ;
 
-
-        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
-                -(getOptimalDistance(other)+other.getOptimalDistance(this));
-
-        if (springDist<0.1){
-            springDist*=0.1;
-        } else if(springDist<0.5) {
-            springDist*=0.3;
-        } else {
-            springDist*=0.49;
-        }
-        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
-            springDist *= -1;
-        }
-
-        if(Math.abs(springDist)>0.01) {
-            addLinkingMove(springDist);
-        }
+        return MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ) - (getOptimalDistance(other)+other.getOptimalDistance(this));
     }
 
     /**
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
-    public void finalMove(EntityRollingStock stock){
-        if(stock.frontLink instanceof EntityRollingStock &&stock.frontLink.hasMoved) {
-            stock.manageLink((EntityRollingStock) stock.frontLink);
+    public void finalMove(EntityRollingStock stock) {
+        double activeSpring = 0.5d; double passiveSpring = 0.25d;
+        double springDist = 0d;
+        int pullingDir = stock.pullingLocomotiveDirection();
+        if (stock.frontLink instanceof EntityRollingStock && stock.frontLink.hasMoved) {
+            springDist += stock.manageLink((EntityRollingStock) stock.frontLink) * (pullingDir == 1 ? activeSpring : (pullingDir == -1 ? 0 : passiveSpring));
         }
-        if(stock.backLink instanceof EntityRollingStock && stock.backLink.hasMoved){
-            stock.manageLink((EntityRollingStock) stock.backLink);
+        if (stock.backLink instanceof EntityRollingStock && stock.backLink.hasMoved) {
+            springDist -= stock.manageLink((EntityRollingStock) stock.backLink) * (pullingDir == -1 ? activeSpring : (pullingDir == 1 ? 0 : passiveSpring));
+        }
+        if (springDist != 0d) {
+            stock.setVelocity(springDist);
         }
 
         stock.applyDrag();
@@ -1061,20 +1058,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    @Override
     public void applyDrag() {
-        float drag = 0.9998f, brakeBuff = 0;
-        //check if lope things can be done at all
+        float drag = 0.98f; float derailSlipFactor = 0.175f;
+        //If an active loco is linked, don't apply a constant drag
         for(AbstractTrains stock : consist) {
-            if(stock!=this && stock.isLocoTurnedOn){
-                return;
-            } else if(stock ==this && isAccelerating()){
-                return;
+            if(stock.isLocoTurnedOn){
+                drag = 1f;
+                break;
             }
-        }
-        if (isBraking) {
-            //realistically would be more like 2.4, but 5 makes gameplay more dramatic
-            brakeBuff += weightKg() * 3.0f;
         }
         if(ConfigHandler.ENABLE_SLOPE_ACCELERATION) {
             if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
@@ -1085,38 +1076,27 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
 
-        //now do drag stuff
-
-        //scale drag for derail, or air lateral friction. if you do both at the same time then it's way too much.
-        if(derail){
-            drag*=CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness;
-        } else if (cachedVectors[2].yCoord > 0) {
+        //Derailed drag (sum up off-rail bogies and scale based on slipperiness of block below)
+        float bogiesOffRail = derail ? 1f : (bogieBack.isOnRail?0f:0.5f) + (bogieFront.isOnRail?0f:0.5f);
+        if(bogiesOffRail > 0) {
+            drag *= 1 - bogiesOffRail * derailSlipFactor * (1 - CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness);
+        }
+        //Lateral friction drag. If you do both at the same time then it's way too much.
+        else if (cachedVectors[2].yCoord > 0) {
             drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f)); //we don't know what 4.448 does
         }
 
-        //add in the drag from combined weight, plus brakes.
-        if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
-            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 1000; //was 4448, no idea. Just adjusted until something felt nice
-        }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
-        if (drag > 0.9999f) {
-            drag = 0.9999f;
-        } else if (drag < 0f) {
-            drag = 0f;
-        }
+        drag = Math.max(0, Math.min(0.9999f, drag));
 
-
-        if(!isAccelerating()) {
-            bogieFront.drag(this, drag);
-            bogieBack.drag(this, drag);
-        }
-
+        bogieFront.multiplyVelocity(drag);
+        bogieBack.multiplyVelocity(drag);
     }
 
     public float getFriction(){return 0.15f;}
 
-    public double getAccelerator(){return accelerate;}
+    //public double getAccelerator(){return accelerate;}
 
 
     public float getVelocity(){
@@ -1312,16 +1292,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (train.backLink != null && last.backLink != null
                     && last == train.backLink
                     && train == last.backLink) {
-                train.bogieBack.multiplyVelocity(train, -vel);
-                train.bogieFront.multiplyVelocity(train, -vel);
+                train.bogieBack.multiplyVelocity(-vel);
+                train.bogieFront.multiplyVelocity(-vel);
             } else if (train.frontLink != null && last.frontLink != null
                     && last == train.frontLink
                     && train == last.frontLink) {
-                train.bogieBack.multiplyVelocity(train, -vel);
-                train.bogieFront.multiplyVelocity(train, -vel);
+                train.bogieBack.multiplyVelocity(-vel);
+                train.bogieFront.multiplyVelocity(-vel);
             } else {
-                train.bogieBack.multiplyVelocity(train, vel);
-                train.bogieFront.multiplyVelocity(train, vel);
+                train.bogieBack.multiplyVelocity(vel);
+                train.bogieFront.multiplyVelocity(vel);
             }
         }
     }
@@ -1499,39 +1479,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         return true;
     }
 
-    protected void applyDragAndPushForces() {
-        motionX *= getDragAir();
-        motionY *= 0.0D;
-        motionZ *= getDragAir();
-    }
-
-    /**
-     * Carts should return their drag factor here
-     *
-     * @return The drag rate.
-     */
-    @Override
-    public double getDragAir() {
-        return isAccelerating()?1D:0.9998D;
-    }
-
     @Override
     public void moveMinecartOnRail(int i, int j, int k, double d) {}
 
 
 
 
-    /**
-     * Returns the carts max speed. Carts going faster than 1.1 cause issues
-     * with chunk loading. This value is compared with the rails max speed to determine
-     * the carts current max speed. A normal rails max speed is 0.4.
-     *
-     * @return Carts max speed.
-     */
-    @Override
-    public float getMaxCartSpeedOnRail() {
-        return maxSpeed;
-    }
 
     @Override
     public float getMaxSpeedAirLateral() {

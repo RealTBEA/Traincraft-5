@@ -759,6 +759,60 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     /**
+     * Finds the direction from which a locomotive is pulling/pushing from.
+     * @return Returns 1 if from front, -1 if from back, or 0 if no pulling locomotive exists or this is the pulling locomotive.
+     */
+    protected int pullingLocomotiveDirection() {
+        if (this instanceof Locomotive) {
+            if (!((Locomotive) this).canBePulled) {
+                return 0;
+            }
+        }
+
+        ArrayList<AbstractTrains> visited = new ArrayList<>();  // In case somebody makes a circular train
+        visited.add(this);
+
+        boolean visitingFront = true;
+
+        AbstractTrains previousTrain = this;
+        AbstractTrains train = frontLink;
+        while (!visited.contains(train)) {
+            if (train == null) {
+                // If we have reached the front end, reset and start from the back. If we reached that other end too, break.
+                if (visitingFront) {
+                    visitingFront = false;
+                    train = backLink;
+                    previousTrain = this;
+                    continue;
+                }
+                else {
+                    break;
+                }
+            }
+
+            visited.add(train);
+
+            if (train instanceof Locomotive) {
+                if (!((Locomotive) train).canBePulled) {
+                    return visitingFront ? 1 : -1;
+                }
+            }
+
+            // Trains can link front to front and back to back, so keep traversing toward whatever side we didn't come from
+            if (train.frontLink != previousTrain) {
+                previousTrain = train;
+                train = train.frontLink;
+            }
+            else {
+                previousTrain = train;
+                train = train.backLink;
+            }
+        }
+        // Both front and back didn't find anything, so there's no pulling locomotive.
+        return 0;
+    }
+
+    /**
      * @return Returns String ArrayList of trusted players' usernames.
      */
     public List<TrustedPlayer> getTrustedList() {

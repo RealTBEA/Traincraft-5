@@ -362,8 +362,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	public int scaleMaxFuel(int i) {
 		return (this.getFuel() * i) / maxFuel;
 	}
-	
-	@Override
+
+	// TODO: Convert to cleaner EntityRollingStock drag?
+	@Deprecated
 	protected void applyDragAndPushForces() {
 		double d26 = MathHelper.sqrt_double(pushX * pushX + pushZ * pushZ);
 		if (d26 > 0.01D) {
@@ -383,9 +384,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			motionY *= 0.0D;
 			motionZ *= 0.69999997615814209D;
 		}
-		motionX *= getDragAir();
+		motionX *= 0.98d;
 		motionY *= 0.0D;
-		motionZ *= getDragAir();
+		motionZ *= 0.98d;
 	}
 
 	protected void updatePushForces() {
