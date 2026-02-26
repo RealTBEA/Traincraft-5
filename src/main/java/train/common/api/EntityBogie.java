@@ -24,6 +24,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
+import train.common.core.util.TraincraftUtil;
 import train.common.items.TCRailTypes;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -215,6 +216,10 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	private void moveOnTCRail(int i, int j, int k, Block l) {
+
+		prevPosX=posX;
+		prevPosY=posY;
+		prevPosZ=posZ;
 
 		if(l instanceof BlockTCRail) {
 			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
@@ -463,12 +468,25 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	 * Always adding in the direction of existing movement prevents reverse, and is unpredictable with null starting velocity, so we compare the bogie's rotation to the host's.
 	 */
 	public void addVelocity(AbstractTrains host, double speed) {
-		Vec3f bogieRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+(float)Math.toDegrees(Math.atan2(velocity[1], velocity[0])),0);
-		Vec3f hostRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-		int direction = bogieRotation.dotProduct(hostRotation) >= 0 ? 1 : -1;
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[0] += bogieRotation.xCoord;
+		velocity[1] += bogieRotation.zCoord;
+	}
 
-		velocity[0] += speed * bogieRotation.xCoord * direction;
-		velocity[1] += speed * bogieRotation.zCoord * direction;
+	public void addLinking(AbstractTrains host, double speed) {
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[2] += bogieRotation.xCoord;
+		velocity[3] += bogieRotation.zCoord;
 	}
 
 	public void multiplyVelocity(double mult) {
@@ -477,12 +495,14 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	public void setVelocity(AbstractTrains host, double speed){
-		Vec3f bogieRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+(float)Math.toDegrees(Math.atan2(velocity[1], velocity[0])),0);
-		Vec3f hostRotation = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-		int direction = bogieRotation.dotProduct(hostRotation) >= 0 ? 1 : -1;
-
-		velocity[0] = speed * bogieRotation.xCoord * direction;
-		velocity[1] = speed * bogieRotation.zCoord * direction;
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[0] = bogieRotation.xCoord;
+		velocity[1] = bogieRotation.zCoord;
 	}
 
 	public World getWorld(){return worldObj;}
