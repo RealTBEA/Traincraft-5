@@ -629,7 +629,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    private double rollingX=0,rollingY=0,rollingZ=0, rollingPitch=0;
+    private double rollingX=0,rollingY=0,rollingZ=0, rollingPitch=0, rollingYaw=0;
     @Override
     @SideOnly(Side.CLIENT)
     /**
@@ -640,6 +640,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.rollingX = par1;
         this.rollingY = par3;
         this.rollingZ = par5;
+        this.rollingYaw = par7;
         this.rollingturnProgress = par9 + 2;
         this.rollingPitch=par8;
     }
@@ -773,16 +774,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 this.setPosition(this.posX + (this.rollingX - this.posX) / (double)this.rollingturnProgress,
                         this.posY + (this.rollingY - this.posY) / (double)this.rollingturnProgress,
                         this.posZ + (this.rollingZ - this.posZ) / (double)this.rollingturnProgress);
+                this.rotationYaw = (float)(this.rotationYaw + (MathHelper.wrapAngleTo180_double(this.rollingYaw - this.rotationYaw)) / this.rollingturnProgress);
+                this.rotationPitch = (float)(this.rotationPitch + (this.rollingPitch - this.rotationPitch) / this.rollingturnProgress);
                 --this.rollingturnProgress;
-
-                if(bogieFront!=null && bogieBack !=null){
-                    posY=(bogieFront.posY+bogieBack.posY)*0.5;
-                    d6 = bogieBack.posX - bogieFront.posX;
-                    d7 = bogieBack.posZ - bogieFront.posZ;
-                    rotationPitch = CommonUtil.atan2degreesf(bogieFront.posY - bogieBack.posY, Math.sqrt(d6 * d6 + d7 * d7));
-                }
             } else {
                 setPosition(posX, posY, posZ);
+                this.setRotation(this.rotationYaw, this.rotationPitch);
 
             }
 
