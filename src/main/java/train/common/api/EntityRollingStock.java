@@ -1006,24 +1006,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         double vecX = other.posX - posX;
         double vecZ = other.posZ - posZ;
-
-
-        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
-                -(getOptimalDistance(other)+other.getOptimalDistance(this));
-
-        if (springDist<0.1){
-            springDist*=0.1;
-        } else if(springDist<0.5) {
-            springDist*=0.3;
-        } else {
-            springDist*=0.49;
+        double dist= MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ) - (getOptimalDistance(other)+other.getOptimalDistance(this));
+        if (frontLink!=null && frontLink.getEntityId()==other.getEntityId()) {
+            dist *= 0.5;
         }
-        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
-            springDist *= -1;
+        else {
+            dist *= -0.5;
         }
 
-        if(Math.abs(springDist)>0.01) {
-            addLinkingMove(springDist);
+        if(Math.abs(dist)>0.01) {
+            addLinkingMove(dist);
         }
     }
 
