@@ -1,4 +1,4 @@
-package train.common.entity.stock.freight;
+package train.common.entity.stock.tender;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -13,16 +13,16 @@ import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-public class EntityTenderFowler4F extends Freight {
+public class EntityTenderBerk1225 extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+Fowler 4F Tender", Traincraft.tcTab); 
-    public EntityTenderFowler4F(World world, double x, double y, double z) {
+    public static final Item thisItem = new ItemRollingStock(Info.modID+":+BerkshireTender", Traincraft.tcTab); 
+    public EntityTenderBerk1225(World world, double x, double y, double z) {
     super(world, x, y, z); }
-    public EntityTenderFowler4F(World world) {
+    public EntityTenderBerk1225(World world) {
     super (world); } 
     //main stats
     @Override
-    public String transportName(){return "Fowler 4F Tender";}
+    public String transportName(){return "1225 tender";}
     @Override
     public String transportcountry(){return "";}
     @Override
@@ -32,7 +32,12 @@ public class EntityTenderFowler4F extends Freight {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/Berkshire_tender_Black.png" , new String[]{} ,"Black", "");
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/Berkshire_tender_Grey.png" , new String[]{} ,"Grey", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "tc:textures/trains/Berkshire_tender_Black.png";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -50,14 +55,17 @@ public class EntityTenderFowler4F extends Freight {
 	public String[] additionalItemText() { return new String[] {"Water capacity: 15000mb"};}
 
 	@Override
-	public float weightKg(){ return 2.0f;}
+	public float weightKg(){ return 4000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.875f, -2.875f};}
 
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
                 null, 
-new ItemStack(ItemIDs.bogie.item, 3), 
-new ItemStack(ItemIDs.steelframe.item, 3), 
+new ItemStack(ItemIDs.bogie.item, 4), 
+new ItemStack(ItemIDs.steelframe.item, 4), 
 new ItemStack(Items.iron_ingot, 2), 
 null,
  null, 
@@ -69,22 +77,26 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelFowler4FTender()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.Model1225Tender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-5.25f, 0.51585f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{2.75f, 0.65f, 0.0625f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, -180.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{3.5999999046325684f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{5.75f,2.1f,1.1f};}
     @Override
     public int[] getTankCapacity(){return new int[]{15000};}
 }

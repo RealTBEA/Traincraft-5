@@ -37,6 +37,9 @@ public class EntityPassengerICE_2class extends EntityRollingStock implements IPa
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/ICE1_2nd_class_White.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -52,7 +55,10 @@ public class EntityPassengerICE_2class extends EntityRollingStock implements IPa
 	public String[] additionalItemText() { return new String[] {""};}
 
 	@Override
-	public float weightKg(){ return 1.5f;}
+	public float weightKg(){ return 3000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.1f, -3.1f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.18f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.8f, 1.0f, 0.8f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

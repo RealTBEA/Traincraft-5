@@ -38,6 +38,9 @@ public class EntityFreightDenverRioGrande extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/drg_baggage_Yellow.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -53,7 +56,10 @@ public class EntityFreightDenverRioGrande extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: any"};}
 
 	@Override
-	public float weightKg(){ return 0.5f;}
+	public float weightKg(){ return 1000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.15f, -3.15f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -72,8 +78,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 1;
 }
     //Model stuff
@@ -83,6 +91,8 @@ return 1;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.14f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

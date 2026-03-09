@@ -1,4 +1,4 @@
-package train.common.entity.stock.freight;
+package train.common.entity.stock.tender;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -13,16 +13,16 @@ import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-public class EntityTenderCoranationClass extends Freight {
+public class EntityTenderMILW extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_coronationclasstender", Traincraft.tcTab); 
-    public EntityTenderCoranationClass(World world, double x, double y, double z) {
+    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_milw_tender", Traincraft.tcTab); 
+    public EntityTenderMILW(World world, double x, double y, double z) {
     super(world, x, y, z); }
-    public EntityTenderCoranationClass(World world) {
+    public EntityTenderMILW(World world) {
     super (world); } 
     //main stats
     @Override
-    public String transportName(){return "Tender Coranation Class";}
+    public String transportName(){return "Tender MILW";}
     @Override
     public String transportcountry(){return "";}
     @Override
@@ -47,46 +47,53 @@ public class EntityTenderCoranationClass extends Freight {
 	public float transportMetricHorsePower(){return 0;}
 
 	@Override
-	public String[] additionalItemText() { return new String[] {"Water capacity: 20000mb"};}
+	public String[] additionalItemText() { return new String[] {"Water capacity: 16000mb"};}
 
 	@Override
-	public float weightKg(){ return 0.5f;}
+	public float weightKg(){ return 3000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{1.9f, -1.9f};}
 
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 6), 
+                new ItemStack(Items.coal, 2), 
 new ItemStack(ItemIDs.bogie.item, 2), 
-new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(ItemIDs.steelframe.item, 1), 
+null, 
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 1),
+null,
 new ItemStack(thisItem)
         };
     }
 
 
-@Override
-public int getTier(){
-return 2;
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
+return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelCoranationClassTender()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelMILWTender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.15f, -0.055f, 0.025f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.9f, 0.9f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{4.0f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{3.799999952316284f,2.1f,1.1f};}
     @Override
-    public int[] getTankCapacity(){return new int[]{20000};}
+    public int[] getTankCapacity(){return new int[]{16000};}
 }
 
 

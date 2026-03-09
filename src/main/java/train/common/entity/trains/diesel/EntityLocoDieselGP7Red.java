@@ -52,6 +52,9 @@ public class EntityLocoDieselGP7Red extends DieselTrain {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/gp7_Red.png";}
+
+    @Override
     public float transportTopSpeed(){return 105;}
 
     @Override
@@ -68,6 +71,9 @@ public class EntityLocoDieselGP7Red extends DieselTrain {
 
 	@Override
 	public float weightKg(){ return 0.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{0.0f, -1.4f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -86,8 +92,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -97,6 +105,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{-0.8f, 0.47f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, -180.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
@@ -105,6 +115,30 @@ return 2;
     //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
+    @Override
+    public int getFuelConsumption(){return 50;}
+
+    @Override
+    public int getWaterConsumption(){return 0;}
+
+    @Override
+    public double getSpecAccel(){return 0.74;}
+
+    @Override
+    public double getSpecBrake(){return 0.96;}
+
+    @Override
+    public TrainSound getHorn(){return new TrainSound("tc:gp_horn", 0.8f,1f, 0);}
+
+    @Override
+    public TrainSound getBell(){return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);}
+
+    @Override
+    public TrainSound getRunningSound(){return new TrainSound("tc:chme3_idle", 0.65f,0.4f, 40);}
+
+    @Override
+    public TrainSound getIdleSound(){return new TrainSound("tc:chme3_idle", 0.65f,0.001f, 40);}
+
     @Override
     public int[] getTankCapacity(){return new int[]{20000};}
 

@@ -37,6 +37,9 @@ public class EntityLocoDieselFOLM1 extends DieselTrain {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/FOL_M1_Grey.png";}
+
+    @Override
     public float transportTopSpeed(){return 110;}
 
     @Override
@@ -53,6 +56,9 @@ public class EntityLocoDieselFOLM1 extends DieselTrain {
 
 	@Override
 	public float weightKg(){ return 0.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{0.0f, -3.9f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{-2.8f, -0.05f, 0.9f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
@@ -90,6 +100,30 @@ return 3;
     //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
+    @Override
+    public int getFuelConsumption(){return 10;}
+
+    @Override
+    public int getWaterConsumption(){return 0;}
+
+    @Override
+    public double getSpecAccel(){return 0.7;}
+
+    @Override
+    public double getSpecBrake(){return 0.965;}
+
+    @Override
+    public TrainSound getHorn(){return new TrainSound("tc:nathan_p01235", 0.8f,1f, 0);}
+
+    @Override
+    public TrainSound getBell(){return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);}
+
+    @Override
+    public TrainSound getRunningSound(){return new TrainSound("tc:FM_38D_6_Notch8", 0.65f,0.4f, 40);}
+
+    @Override
+    public TrainSound getIdleSound(){return new TrainSound("tc:FM_38D_6_Idle", 0.65f,0.001f, 40);}
+
     @Override
     public int[] getTankCapacity(){return new int[]{15000};}
 

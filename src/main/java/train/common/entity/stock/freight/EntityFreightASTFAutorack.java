@@ -50,7 +50,10 @@ public class EntityFreightASTFAutorack extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: any | Stack limit 1"};}
 
 	@Override
-	public float weightKg(){ return 5.0f;}
+	public float weightKg(){ return 10000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{4.35f, -4.35f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -69,8 +72,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -80,6 +85,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{-1.0f, -0.2f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

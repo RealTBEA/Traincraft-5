@@ -41,6 +41,9 @@ public class EntityFreightShortCoveredHopper extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/ShortCoveredHopper_Grey.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -56,7 +59,10 @@ public class EntityFreightShortCoveredHopper extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: any"};}
 
 	@Override
-	public float weightKg(){ return 4.0f;}
+	public float weightKg(){ return 8000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.0f, -2.0f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -75,8 +81,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -86,6 +94,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{-2.2f, 0.25f, 0.7f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

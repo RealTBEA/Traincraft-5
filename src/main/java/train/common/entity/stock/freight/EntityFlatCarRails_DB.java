@@ -37,6 +37,9 @@ public class EntityFlatCarRails_DB extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/flatCarRails_DB_Red.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -52,7 +55,10 @@ public class EntityFlatCarRails_DB extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: only rails"};}
 
 	@Override
-	public float weightKg(){ return 5.0f;}
+	public float weightKg(){ return 10000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{1.84f, -1.84f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, 0.44f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

@@ -39,6 +39,9 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/stockcar_Blue.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -54,7 +57,10 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 	public String[] additionalItemText() { return new String[] {""};}
 
 	@Override
-	public float weightKg(){ return 2.0f;}
+	public float weightKg(){ return 4000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{1.45f, -1.45f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -73,8 +79,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -84,6 +92,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{-0.0f, 0.32f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -180.0f, -180.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

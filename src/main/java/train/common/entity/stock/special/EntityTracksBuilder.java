@@ -52,6 +52,9 @@ public class EntityTracksBuilder extends EntityRollingStock {
 	@Override
 	public float weightKg(){ return 0.0f;}
 
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.1f, -2.1f};}
+
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
@@ -69,8 +72,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -80,6 +85,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{0.0f, 0.42f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

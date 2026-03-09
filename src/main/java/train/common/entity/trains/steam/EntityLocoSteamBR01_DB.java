@@ -38,6 +38,9 @@ public class EntityLocoSteamBR01_DB extends SteamTrain {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/locoBR01_DB_Black.png";}
+
+    @Override
     public float transportTopSpeed(){return 130;}
 
     @Override
@@ -54,6 +57,9 @@ public class EntityLocoSteamBR01_DB extends SteamTrain {
 
 	@Override
 	public float weightKg(){ return 0.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{0.0f, -3.7f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -72,8 +78,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -83,6 +91,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{-1.0f, 0.44f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
@@ -91,6 +101,33 @@ return 2;
     //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
+    @Override
+    public int getFuelConsumption(){return 60;}
+
+    @Override
+    public int getWaterConsumption(){return 200;}
+
+    @Override
+    public double getSpecAccel(){return 0.6;}
+
+    @Override
+    public double getSpecBrake(){return 0.97;}
+
+    @Override
+    public TrainSound getHorn(){return new TrainSound("tc:german_steam_horn", 0.8f,1f, 0);}
+
+    @Override
+    public TrainSound getBell(){return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);}
+
+    @Override
+    public TrainSound getRunningSound(){return new TrainSound("tc:steam_run", 0.4f,0.4f, 20);}
+
+    @Override
+    public TrainSound getIdleSound(){return new TrainSound("tc:steam_run", 0.4f,0.001f, 20);}
+
+    @Override
+    public int getOverheatTime(){return 300;}
+
     @Override
     public int[] getTankCapacity(){return new int[]{10000, 2000};}
 

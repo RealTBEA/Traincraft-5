@@ -1,4 +1,4 @@
-package train.common.entity.stock.freight;
+package train.common.entity.stock.tender;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -13,16 +13,16 @@ import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-public class EntityTenderC62Class extends Freight {
+public class EntityTenderHeavy extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tender_c62_class", Traincraft.tcTab); 
-    public EntityTenderC62Class(World world, double x, double y, double z) {
+    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tender_heavy", Traincraft.tcTab); 
+    public EntityTenderHeavy(World world, double x, double y, double z) {
     super(world, x, y, z); }
-    public EntityTenderC62Class(World world) {
+    public EntityTenderHeavy(World world) {
     super (world); } 
     //main stats
     @Override
-    public String transportName(){return "Tender C62Class";}
+    public String transportName(){return "Tender Heavy";}
     @Override
     public String transportcountry(){return "";}
     @Override
@@ -32,9 +32,12 @@ public class EntityTenderC62Class extends Freight {
 
     @Override
     public void registerSkins(){
-        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/c62_tender_Black.png" , new String[]{} ,"Black", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/c62_tender_Red.png" , new String[]{} ,"Red", "");
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/heavytender_Black.png" , new String[]{} ,"Black", "");
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/heavytender_Brown.png" , new String[]{} ,"Brown", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "tc:textures/trains/heavytender_Black.png";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -52,41 +55,48 @@ public class EntityTenderC62Class extends Freight {
 	public String[] additionalItemText() { return new String[] {"Water capacity: 14000mb"};}
 
 	@Override
-	public float weightKg(){ return 0.5f;}
+	public float weightKg(){ return 4000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{1.3f, -1.3f};}
 
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 6), 
+                new ItemStack(Items.iron_ingot, 4), 
 new ItemStack(ItemIDs.bogie.item, 2), 
-new ItemStack(ItemIDs.steelframe.item, 2), 
+new ItemStack(ItemIDs.steelframe.item, 4), 
 new ItemStack(Items.iron_ingot, 2), 
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 2),
+new ItemStack(Items.coal, 1),
 new ItemStack(thisItem)
         };
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelC62Tender()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTenderHeavy()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.42f, 0.0f}};}
-@Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.4f, 0.0f}};}
+    @Override
+    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, -180.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{4.0f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{2.5999999046325684f,2.1f,1.1f};}
     @Override
     public int[] getTankCapacity(){return new int[]{14000};}
 }

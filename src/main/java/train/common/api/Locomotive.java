@@ -308,6 +308,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         return fuelRate == 0 ? getSpec().getFuelConsumption() : fuelRate;
     }
 
+    public int getWaterConsumption() {
+        return getSpec().getWaterConsumption();
+    }
+
     /**
      * Set acceleration rate if rate = 0, default value is used
      *

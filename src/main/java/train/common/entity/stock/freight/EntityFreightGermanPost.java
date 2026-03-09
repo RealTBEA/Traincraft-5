@@ -38,6 +38,9 @@ public class EntityFreightGermanPost extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/german_post_Yellow.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -53,7 +56,10 @@ public class EntityFreightGermanPost extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: non-blocks"};}
 
 	@Override
-	public float weightKg(){ return 0.1f;}
+	public float weightKg(){ return 200.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.955f, -3.955f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -72,8 +78,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -83,6 +91,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{-1.0f, -0.15f, -0.075f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

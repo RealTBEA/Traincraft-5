@@ -37,6 +37,9 @@ public class EntityTankWagonThreeDome extends LiquidTank {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/tanker_three_dome_Green.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -52,7 +55,10 @@ public class EntityTankWagonThreeDome extends LiquidTank {
 	public String[] additionalItemText() { return new String[] {"Capacity: 90000mb"};}
 
 	@Override
-	public float weightKg(){ return 7.5f;}
+	public float weightKg(){ return 15000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.7f, -2.7f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.17f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

@@ -202,12 +202,14 @@ public class trainConverter {
                 builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
 
             }
-            builder.append("    @Override\n");
-            builder.append("    public String getDefaultSkin(){return ");
-            builder.append(getRender(trn).getTextureFile(colours.get(0)).toString());
-            builder.append(";}\n\n");
         }
         builder.append("    }\n\n");
+        if(colours.size()>0){
+            builder.append("    @Override\n");
+            builder.append("    public String getDefaultSkin(){return \"");
+            builder.append(getRender(trn).getTextureFile(colours.get(0)).toString());
+            builder.append("\";}\n\n");
+        }
 
         builder.append("    @Override\n");
         builder.append("    public float transportTopSpeed(){return ");
@@ -416,8 +418,8 @@ public class trainConverter {
             builder.append(getRender(trn).getScale()[2]);
             builder.append("f}};}\n");
         } else {
-            builder.append("@Override\n");
-            builder.append("    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}\n");
+            builder.append("    @Override\n");
+            builder.append("    public float[][] getRenderScale(){return new float[][]{null};}\n");
         }
 
         builder.append("    //these are separated for being fiddly.\n");
@@ -449,51 +451,47 @@ public class trainConverter {
 
 
             builder.append("    @Override\n");
-            builder.append("    public double getSpeAccel(){return ");
+            builder.append("    public double getSpecAccel(){return ");
             builder.append(getTrain(trn).getAccelerationRate());
             builder.append(";}\n\n");
             builder.append("    @Override\n");
-            builder.append("    public double getSpeBrake(){return ");
+            builder.append("    public double getSpecBrake(){return ");
             builder.append(getTrain(trn).getBrakeRate());
             builder.append(";}\n\n");
 
             if(getSound(trn) !=null) {
                 if(!getSound(trn).getHornString().isEmpty()) {
                     builder.append("    @Override\n");
-                    builder.append("    public TrainSound getHorn(){return new TrainSound(");
+                    builder.append("    public TrainSound getHorn(){return new TrainSound(\"");
                     builder.append(getSound(trn).getHornString());
-                    builder.append(", ");
+                    builder.append("\", ");
                     builder.append(getSound(trn).getHornVolume());
-                    builder.append(",1f, 0);");
-                    builder.append(");}\n\n");
+                    builder.append("f,1f, 0);}\n\n");
                 }
 
                 builder.append("    @Override\n");
                 builder.append("    public TrainSound getBell(){return new TrainSound(");
-                builder.append("Info.resourceLocation + \":bell\",0.5f,1f, 0);");
-                builder.append(");}\n\n");
+                builder.append("Info.resourceLocation + \":bell\",0.5f,1f, 0);}\n\n");
 
                 if(!getSound(trn).getRunString().isEmpty()) {
                     builder.append("    @Override\n");
-                    builder.append("    public TrainSound getRunningSound(){return new TrainSound(");
+                    builder.append("    public TrainSound getRunningSound(){return new TrainSound(\"");
                     builder.append(getSound(trn).getRunString());
-                    builder.append(", ");
+                    builder.append("\", ");
                     builder.append(getSound(trn).getRunVolume());
-                    builder.append(",0.4f, ");
+                    builder.append("f,0.4f, ");
                     builder.append(getSound(trn).getRunSoundLength());
-                    builder.append(");");
                     builder.append(");}\n\n");
                 }
 
                 if(!getSound(trn).getIdleString().isEmpty()) {
                     builder.append("    @Override\n");
-                    builder.append("    public TrainSound getIdleSound(){return new TrainSound(");
+                    builder.append("    public TrainSound getIdleSound(){return new TrainSound(\"");
                     builder.append(getSound(trn).getIdleString());
-                    builder.append(", ");
+                    builder.append("\", ");
                     builder.append(getSound(trn).getIdleVolume());
-                    builder.append(",0.001f, ");
+                    builder.append("f,0.001f, ");
                     builder.append(getSound(trn).getIdleSoundLength());
-                    builder.append(");");
                     builder.append(");}\n\n");
                 }
             }

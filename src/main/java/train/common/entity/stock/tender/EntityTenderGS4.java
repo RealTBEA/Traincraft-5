@@ -1,4 +1,4 @@
-package train.common.entity.stock.freight;
+package train.common.entity.stock.tender;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -13,7 +13,7 @@ import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-public class EntityTenderGS4 extends Freight {
+public class EntityTenderGS4 extends Tender {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+GS4_tender", Traincraft.tcTab); 
     public EntityTenderGS4(World world, double x, double y, double z) {
@@ -37,6 +37,9 @@ public class EntityTenderGS4 extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/GS4_tender_Orange.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -52,7 +55,10 @@ public class EntityTenderGS4 extends Freight {
 	public String[] additionalItemText() { return new String[] {"Water capacity: 18000mb"};}
 
 	@Override
-	public float weightKg(){ return 2.0f;}
+	public float weightKg(){ return 4000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.1f, -2.1f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.15f, -0.05f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.8f, 1.0f, 0.8f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

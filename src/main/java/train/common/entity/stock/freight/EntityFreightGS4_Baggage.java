@@ -46,6 +46,9 @@ public class EntityFreightGS4_Baggage extends Freight {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/GS4_baggage_Orange.png";}
+
+    @Override
     public float transportTopSpeed(){return 0;}
 
     @Override
@@ -61,7 +64,10 @@ public class EntityFreightGS4_Baggage extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: any"};}
 
 	@Override
-	public float weightKg(){ return 1.0f;}
+	public float weightKg(){ return 2000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.1f, -3.1f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -80,8 +86,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -91,6 +99,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.025f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.8f, 1.0f, 0.8f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

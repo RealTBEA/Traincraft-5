@@ -50,7 +50,10 @@ public class PassengerIC4_DSB_FH extends EntityRollingStock implements IPassenge
 	public String[] additionalItemText() { return new String[] {"Unfinished, Creative Only"};}
 
 	@Override
-	public float weightKg(){ return 1.5f;}
+	public float weightKg(){ return 3000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.65f, -3.65f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -58,8 +61,10 @@ public class PassengerIC4_DSB_FH extends EntityRollingStock implements IPassenge
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -69,6 +74,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{-0.8f, 0.44f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

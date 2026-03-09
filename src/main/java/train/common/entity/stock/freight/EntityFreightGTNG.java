@@ -50,7 +50,10 @@ public class EntityFreightGTNG extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: opaque blocks"};}
 
 	@Override
-	public float weightKg(){ return 0.5f;}
+	public float weightKg(){ return 1000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{2.025f, -2.025f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -69,8 +72,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -80,6 +85,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.2f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -180.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

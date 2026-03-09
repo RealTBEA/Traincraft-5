@@ -50,7 +50,10 @@ public class EntityBoxCartPRR extends Freight {
 	public String[] additionalItemText() { return new String[] {"Cargo: any"};}
 
 	@Override
-	public float weightKg(){ return 2.0f;}
+	public float weightKg(){ return 4000.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{3.05f, -3.05f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -69,8 +72,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 2;
 }
     //Model stuff
@@ -80,6 +85,8 @@ return 2;
     public float[][] modelOffsets(){return new float[][]{{0.0f, 0.38f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}

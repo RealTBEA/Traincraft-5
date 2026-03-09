@@ -40,6 +40,9 @@ public class EntityLocoElectricE10_DB extends ElectricTrain {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/locoe10_db_Blue.png";}
+
+    @Override
     public float transportTopSpeed(){return 150;}
 
     @Override
@@ -56,6 +59,9 @@ public class EntityLocoElectricE10_DB extends ElectricTrain {
 
 	@Override
 	public float weightKg(){ return 0.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{0.0f, -3.8f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -74,8 +80,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -85,6 +93,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{-1.7f, -0.05f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -180.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.9f, 0.9f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
@@ -93,6 +103,30 @@ return 3;
     //Train specific stuff
     @Override
     public String transportFuelType(){return "electric";}
+    @Override
+    public int getFuelConsumption(){return 8;}
+
+    @Override
+    public int getWaterConsumption(){return 0;}
+
+    @Override
+    public double getSpecAccel(){return 0.66;}
+
+    @Override
+    public double getSpecBrake(){return 0.96;}
+
+    @Override
+    public TrainSound getHorn(){return new TrainSound("tc:mg_horn", 1.0f,1f, 0);}
+
+    @Override
+    public TrainSound getBell(){return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);}
+
+    @Override
+    public TrainSound getRunningSound(){return new TrainSound("tc:mg_run", 0.6f,0.4f, 8);}
+
+    @Override
+    public TrainSound getIdleSound(){return new TrainSound("tc:mg_idle", 0.4f,0.001f, 50);}
+
     @Override
     public int[] getTankCapacity(){return new int[]{8000};}
 

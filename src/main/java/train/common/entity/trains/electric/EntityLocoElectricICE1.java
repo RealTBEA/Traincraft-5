@@ -37,6 +37,9 @@ public class EntityLocoElectricICE1 extends ElectricTrain {
     }
 
     @Override
+    public String getDefaultSkin(){return "tc:textures/trains/ICE1_Engine_White.png";}
+
+    @Override
     public float transportTopSpeed(){return 280;}
 
     @Override
@@ -53,6 +56,9 @@ public class EntityLocoElectricICE1 extends ElectricTrain {
 
 	@Override
 	public float weightKg(){ return 0.0f;}
+
+	@Override
+	public float[] rotationPoints(){ return new float[]{0.0f, -5.0f};}
 
     @Override
     public ItemStack[] getRecipe() {
@@ -71,8 +77,10 @@ new ItemStack(thisItem)
     }
 
 
-@Override
-public int getTier(){
+    @Override
+    public Item getItem(){return thisItem;}
+    @Override
+    public int getTier(){
 return 3;
 }
     //Model stuff
@@ -82,6 +90,8 @@ return 3;
     public float[][] modelOffsets(){return new float[][]{{0.0f, -0.18f, 0.1f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    @Override
+    public float[][] getRenderScale(){return new float[][]{{0.8f, 1.0f, 0.8f}};}
     //these are separated for being fiddly.
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
@@ -90,6 +100,31 @@ return 3;
     //Train specific stuff
     @Override
     public String transportFuelType(){return "electric";}
+    @Override
+    public int getFuelConsumption(){return 40;}
+
+    @Override
+    public int getWaterConsumption(){return 0;}
+
+    @Override
+    public double getSpecAccel(){return 1.5;}
+
+    @Override
+    public double getSpecBrake(){return 0.98;}
+
+    @Override
+    public TrainSound getHorn(){return new TrainSound("tc:mg_horn", 1.0f,1f, 0);}
+
+    @Override
+    public TrainSound getBell(){return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);}
+
+    @Override
+    public TrainSound getRunningSound(){return new TrainSound("tc:mg_run", 0.8f,0.4f, 10);}
+
+    @Override
+    public TrainSound getIdleSound(){return new TrainSound("tc:mg_idle", 0.6f,0.001f, 50);}
+
+    @Override
     public int[] getTankCapacity(){return new int[]{2250};}
 
 }

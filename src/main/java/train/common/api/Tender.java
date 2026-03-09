@@ -53,7 +53,9 @@ public abstract class Tender extends Freight implements IFluidHandler {
     }
 
     @Override
-    public abstract int getSizeInventory();
+    public int getSizeInventory(){
+        return super.getSizeInventory()+2;
+    }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
