@@ -1,0 +1,97 @@
+package train.common.entity.trains.steam;
+
+import fexcraft.tmt.slim.ModelBase;
+import ebf.tim.api.SkinRegistry;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import train.common.Traincraft;
+import train.common.api.*;
+import train.common.items.ItemRollingStock;
+import train.common.library.Info;
+import train.common.library.ItemIDs;
+
+public class EntityLocoSteamMILWClassA extends SteamTrain {
+
+    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_milw_class_a", Traincraft.tcTab); 
+    public EntityLocoSteamMILWClassA(World world, double x, double y, double z) {
+    super(world, x, y, z); }
+    public EntityLocoSteamMILWClassA(World world) {
+    super (world); } 
+    //main stats
+    @Override
+    public String transportName(){return "Loco Steam MILW Class A";}
+    @Override
+    public String transportcountry(){return "";}
+    @Override
+    public String transportYear(){return "";}
+    @Override
+    public boolean isFictional(){return false;}
+
+    @Override
+    public void registerSkins(){
+    }
+
+    @Override
+    public float transportTopSpeed(){return 193;}
+
+    @Override
+    public int getInventoryRows(){return 0;}
+
+	@Override
+	public float getPlayerScale(){ 	return 0.65f;}
+
+	@Override
+	public float transportMetricHorsePower(){return 1228;}
+
+	@Override
+	public String[] additionalItemText() { return new String[] {""};}
+
+	@Override
+	public float weightKg(){ return 0.0f;}
+
+    @Override
+    public ItemStack[] getRecipe() {
+        return new ItemStack[]{
+                null, 
+new ItemStack(ItemIDs.bogie.item, 4), 
+new ItemStack(ItemIDs.steelframe.item, 1), 
+null, 
+new ItemStack(ItemIDs.steelchimney.item, 1), 
+new ItemStack(ItemIDs.steelcab.item, 1), 
+new ItemStack(ItemIDs.boiler.item, 3), 
+new ItemStack(ItemIDs.firebox.item, 1), 
+null,
+new ItemStack(thisItem)
+        };
+    }
+
+
+@Override
+public int getTier(){
+return 3;
+}
+    //Model stuff
+    @Override
+    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelMILWClassA()};}
+    @Override
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.1f, 0.0f}};}
+    @Override
+    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    //these are separated for being fiddly.
+    @Override
+    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    @Override
+    public float[] getHitboxSize(){return new float[]{6.100000023841858f,2.1f,1.1f};}
+    //Train specific stuff
+    @Override
+    public String transportFuelType(){return "steam";}
+    @Override
+    public int[] getTankCapacity(){return new int[]{10000, 2000};}
+
+}
+
+
+    //these only change in very specific use cases.

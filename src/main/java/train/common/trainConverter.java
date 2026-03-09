@@ -73,12 +73,14 @@ public class trainConverter {
         builder.append(
                 "\n" +
                         "import fexcraft.tmt.slim.ModelBase;\n"+
+                        "import ebf.tim.api.SkinRegistry;\n"+
                         "import net.minecraft.init.Items;\n"+
                         "import net.minecraft.item.Item;\n"+
                         "import net.minecraft.item.ItemStack;\n"+
+                        "import net.minecraft.init.Blocks;\n"+
                         "import net.minecraft.world.World;\n"+
                         "import train.common.Traincraft;\n"+
-                        "import train.common.api.SteamTrain;\n"+
+                        "import train.common.api.*;\n"+
                         "import train.common.items.ItemRollingStock;\n"+
                         "import train.common.library.Info;\n"+
                         "import train.common.library.ItemIDs;\n"+
@@ -141,16 +143,16 @@ public class trainConverter {
             }
         }
 
-        builder.append("    public static final Item thisItem = new ItemRollingStock(\"Info.modID+\":\"+" + itemName + "\", Traincraft.tcTab); \n");
+        builder.append("    public static final Item thisItem = new ItemRollingStock(Info.modID+\":+" + itemName + "\", Traincraft.tcTab); \n");
 
 
         builder.append("    public ");
         builder.append(classname);
-        builder.append("(World world, double x, double y, double z,) {\n");
+        builder.append("(World world, double x, double y, double z) {\n");
         builder.append("    super(world, x, y, z); }\n");
 
         builder.append("    public ");
-        builder.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", ""));
+        builder.append(classname);
         builder.append("(World world) {\n");
         builder.append("    super (world); } \n");
 
@@ -214,7 +216,7 @@ public class trainConverter {
         builder.append("	@Override\n");
         builder.append("	public String[] additionalItemText() { return new String[] {\"");
         builder.append(getTrain(trn).getAdditionnalTooltip());
-        builder.append("\";}}\n\n");
+        builder.append("\"};}\n\n");
 
         builder.append("	@Override\n");
         builder.append("	public float weightKg(){ return ");
@@ -223,7 +225,6 @@ public class trainConverter {
 
         builder.append("    @Override\n");
         builder.append("    public ItemStack[] getRecipe() {\n");
-        builder.append("        return new ItemStack[]{\n");
 
 
         recipeList = RecipeBookHandler.assemblyListCleaner(TierRecipeManager.getInstance().getRecipeList());
@@ -232,6 +233,7 @@ public class trainConverter {
         boolean found = false;
         for (ITierRecipe recipe : recipeList){
             if(recipe.getOutput().getItem()==trn.getCartItem().getItem()){
+                builder.append("        return new ItemStack[]{\n");
                 tier = recipe.getTier();
 
                 builder.append("                ");
@@ -328,6 +330,7 @@ public class trainConverter {
 
                 builder.append("new ItemStack(");
                 builder.append("thisItem)");
+                builder.append("\n        };\n");
 
 
                 found=true;
@@ -335,11 +338,8 @@ public class trainConverter {
             }
         }
         if(!found) {
-            builder.append("                new ItemStack(), new ItemStack(), new ItemStack(), \n");
-            builder.append("                new ItemStack(), new ItemStack(), new ItemStack(), \n");
-            builder.append("                new ItemStack(), new ItemStack(), new ItemStack() \n");
+            builder.append(" return null;\n");
         }
-        builder.append("        };\n");
         builder.append("    }\n\n\n");
 
         builder.append("@Override\n");
@@ -490,6 +490,13 @@ public class trainConverter {
                     i.getItem().delegate.name().split(":")[1];
 
         } else {
+            if(i.getItem().delegate.name().split(":")[1].equals("ingot")){
+                return "Items.iron_ingot";
+            }
+
+            if(i.getItem().delegate.name().split(":")[1].equals("potion")){
+                return "Items.potionitem";
+            }
             return "Items." +
                     i.getItem().delegate.name().split(":")[1];
         }
