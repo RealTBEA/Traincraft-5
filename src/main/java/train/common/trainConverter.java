@@ -9,6 +9,7 @@ import train.common.api.*;
 import train.common.api.crafting.ITierRecipe;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
+import train.common.library.EnumSounds;
 import train.common.library.EnumTrains;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
@@ -31,6 +32,15 @@ public class trainConverter {
 
     public static RenderEnum getRender(AbstractTrains train) {
         for (RenderEnum trn : RenderEnum.values()) {
+            if (trn.getEntityClass() == train.getClass()) {
+                return trn;
+            }
+        }
+        return null;
+    }
+
+    public static TrainSoundRecord getSound(AbstractTrains train) {
+        for (EnumSounds trn : EnumSounds.values()) {
             if (trn.getEntityClass() == train.getClass()) {
                 return trn;
             }
@@ -110,13 +120,13 @@ public class trainConverter {
             outfolder+="passenger/";
             builder.append(" extends EntityRollingStock implements IPassenger {\n\n");
         }
-        else if (trn instanceof Freight){
-            outfolder+="freight/";
-            builder.append(" extends Freight {\n\n");
-        }
         else if (trn instanceof Tender){
             outfolder+="tender/";
             builder.append(" extends Tender {\n\n");
+        }
+        else if (trn instanceof Freight){
+            outfolder+="freight/";
+            builder.append(" extends Freight {\n\n");
         }
         else if (trn instanceof LiquidTank){
             outfolder+="tanker/";
@@ -186,10 +196,16 @@ public class trainConverter {
         String transportSkin;
         List<String> colours = getTrain(trn).getColors();
 
-        for (int color = 0; color < colours.size(); color++) {
-            transportSkin = getRender(trn).getTextureFile(colours.get(color)).toString();
-            builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
+        if(colours.size()>0) {
+            for (int color = 0; color < colours.size(); color++) {
+                transportSkin = getRender(trn).getTextureFile(colours.get(color)).toString();
+                builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
 
+            }
+            builder.append("    @Override\n");
+            builder.append("    public String getDefaultSkin(){return ");
+            builder.append(getRender(trn).getTextureFile(colours.get(0)).toString());
+            builder.append(";}\n\n");
         }
         builder.append("    }\n\n");
 
@@ -213,15 +229,24 @@ public class trainConverter {
         builder.append(getTrain(trn).getMHP());
         builder.append(";}\n\n");
 
-        builder.append("	@Override\n");
-        builder.append("	public String[] additionalItemText() { return new String[] {\"");
-        builder.append(getTrain(trn).getAdditionnalTooltip());
-        builder.append("\"};}\n\n");
+        if(getTrain(trn).getAdditionnalTooltip()!=null) {
+            builder.append("	@Override\n");
+            builder.append("	public String[] additionalItemText() { return new String[] {\"");
+            builder.append(getTrain(trn).getAdditionnalTooltip());
+            builder.append("\"};}\n\n");
+        }
 
         builder.append("	@Override\n");
         builder.append("	public float weightKg(){ return ");
-        builder.append(getTrain(trn).getMass());
+        builder.append(getTrain(trn).getMass()*2000);
         builder.append("f;}\n\n");
+
+        builder.append("	@Override\n");
+        builder.append("	public float[] rotationPoints(){ return new float[]{");
+        builder.append(getTrain(trn).getEntity(null).rotationPoints()[0]);
+        builder.append("f, ");
+        builder.append(getTrain(trn).getEntity(null).rotationPoints()[1]);
+        builder.append("f};}\n\n");
 
         builder.append("    @Override\n");
         builder.append("    public ItemStack[] getRecipe() {\n");
@@ -341,9 +366,10 @@ public class trainConverter {
             builder.append(" return null;\n");
         }
         builder.append("    }\n\n\n");
+        builder.append("    @Override\n    public Item getItem(){return thisItem;}\n");
 
-        builder.append("@Override\n");
-        builder.append("public int getTier(){\n");
+        builder.append("    @Override\n");
+        builder.append("    public int getTier(){\n");
         builder.append("return ");
         builder.append(tier);
         builder.append(";\n");
@@ -380,6 +406,20 @@ public class trainConverter {
             builder.append("    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}\n");
         }
 
+        if(getRender(trn).getScale()!=null){
+            builder.append("    @Override\n");
+            builder.append("    public float[][] getRenderScale(){return new float[][]{{");
+            builder.append(getRender(trn).getScale()[0]);
+            builder.append("f, ");
+            builder.append(getRender(trn).getScale()[1]);
+            builder.append("f, ");
+            builder.append(getRender(trn).getScale()[2]);
+            builder.append("f}};}\n");
+        } else {
+            builder.append("@Override\n");
+            builder.append("    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}\n");
+        }
+
         builder.append("    //these are separated for being fiddly.\n");
         builder.append("    @Override\n");
         builder.append("    public float[][] getRiderOffsets(){return new float[][]{{");
@@ -391,21 +431,79 @@ public class trainConverter {
         builder.append("f,2.1f,1.1f};}\n");
 
 
-       /*
-        builder.append("    @Override\n");
-        builder.append("    public float[] bogieLengthFromCenter() {return new float[]{");
-        builder.append((-getTrain(trn).getBogieLocoPosition()*0.5f)+(trn.getOptimalDistance(null)*0.8f));
-        builder.append("f, ");
-        builder.append(-((-getTrain(trn).getBogieLocoPosition()*0.5f)+(trn.getOptimalDistance(null)*0.8f)));
-        builder.append("f};}\n");
-*/
-
         if(trn instanceof Locomotive) {
             builder.append("    //Train specific stuff\n");
             builder.append("    @Override\n");
             builder.append("    public String transportFuelType(){return \"");
             builder.append(getTrain(trn).getTrainType());
             builder.append("\";}\n");
+
+            builder.append("    @Override\n");
+            builder.append("    public int getFuelConsumption(){return ");
+            builder.append(getTrain(trn).getFuelConsumption());
+            builder.append(";}\n\n");
+            builder.append("    @Override\n");
+            builder.append("    public int getWaterConsumption(){return ");
+            builder.append(getTrain(trn).getWaterConsumption());
+            builder.append(";}\n\n");
+
+
+            builder.append("    @Override\n");
+            builder.append("    public double getSpeAccel(){return ");
+            builder.append(getTrain(trn).getAccelerationRate());
+            builder.append(";}\n\n");
+            builder.append("    @Override\n");
+            builder.append("    public double getSpeBrake(){return ");
+            builder.append(getTrain(trn).getBrakeRate());
+            builder.append(";}\n\n");
+
+            if(getSound(trn) !=null) {
+                if(!getSound(trn).getHornString().isEmpty()) {
+                    builder.append("    @Override\n");
+                    builder.append("    public TrainSound getHorn(){return new TrainSound(");
+                    builder.append(getSound(trn).getHornString());
+                    builder.append(", ");
+                    builder.append(getSound(trn).getHornVolume());
+                    builder.append(",1f, 0);");
+                    builder.append(");}\n\n");
+                }
+
+                builder.append("    @Override\n");
+                builder.append("    public TrainSound getBell(){return new TrainSound(");
+                builder.append("Info.resourceLocation + \":bell\",0.5f,1f, 0);");
+                builder.append(");}\n\n");
+
+                if(!getSound(trn).getRunString().isEmpty()) {
+                    builder.append("    @Override\n");
+                    builder.append("    public TrainSound getRunningSound(){return new TrainSound(");
+                    builder.append(getSound(trn).getRunString());
+                    builder.append(", ");
+                    builder.append(getSound(trn).getRunVolume());
+                    builder.append(",0.4f, ");
+                    builder.append(getSound(trn).getRunSoundLength());
+                    builder.append(");");
+                    builder.append(");}\n\n");
+                }
+
+                if(!getSound(trn).getIdleString().isEmpty()) {
+                    builder.append("    @Override\n");
+                    builder.append("    public TrainSound getIdleSound(){return new TrainSound(");
+                    builder.append(getSound(trn).getIdleString());
+                    builder.append(", ");
+                    builder.append(getSound(trn).getIdleVolume());
+                    builder.append(",0.001f, ");
+                    builder.append(getSound(trn).getIdleSoundLength());
+                    builder.append(");");
+                    builder.append(");}\n\n");
+                }
+            }
+
+            if (trn instanceof SteamTrain) {
+                builder.append("    @Override\n");
+                builder.append("    public int getOverheatTime(){return ");
+                builder.append(getTrain(trn).getHeatingTime());
+                builder.append(";}\n\n");
+            }
 
             if(getTrain(trn).getTankCapacity()>0){
                 builder.append("    @Override\n");
@@ -417,6 +515,7 @@ public class trainConverter {
                 }
                 builder.append("};}\n");
             } else {
+                builder.append("    @Override\n");
                 builder.append("    public int[] getTankCapacity(){return new int[]{2250};}\n");
             }
         } else {

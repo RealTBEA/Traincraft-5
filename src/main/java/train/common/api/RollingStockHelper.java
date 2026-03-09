@@ -199,7 +199,7 @@ public interface RollingStockHelper {
     /**
      * @return the fuel consumption per 100 ticks of the entity. default is 80.
      */
-    int getSpecFuelConsumption();
+    int getFuelConsumption();
 
     /**
      * @return the acceleration rate per tick of the entity. default is 0.4.
