@@ -15,8 +15,11 @@ import train.common.library.Info;
 import train.common.library.ItemIDs;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class trainConverter {
 
@@ -51,28 +54,50 @@ public class trainConverter {
     public static void write(TrainRecord[] trains) {
         System.out.println("enumlength " + EnumTrains.trains().length);
         for (TrainRecord t : trains) {
-            EntityRollingStock rollingStock = null;
-
-            rollingStock = (EntityRollingStock) t.getEntity((World) null, 0, 0, 0);
-            //if(t.getColors()!=null && !t.getColors().isEmpty()){
-            //    if(rollingStock != null){
-            //        rollingStock.setColor((t.getColors().get(0)));
-            //    }
-            // }
+            EntityRollingStock rollingStock = (EntityRollingStock) t.getEntity((World) null, 0, 0, 0);
             if (rollingStock != null) {
                 print(rollingStock);
             }
 
+        }
+
+        StringBuilder reg = new StringBuilder();
+        for(String k: registerList.keySet()){
+            reg.append("public static AbstractTrains[] list")
+                    .append(k)
+                    .append("() {\n")
+                    .append("        return new AbstractTrains[]{")
+            .append(registerList.get(k))
+            .append("};\n}\n");
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Traincraft.configDirectory.getAbsolutePath());
+        sb.append("/traincraft/");
+        if (!new File(sb.toString()).exists()) {
+            new File(sb.toString()).mkdir();
+        }
+        sb.append("RegistrationLists.java");
+
+
+        FileOutputStream fileoutputstream = null;
+        try {
+            fileoutputstream = new FileOutputStream(new File(sb.toString()));
+            fileoutputstream.write(reg.toString().getBytes());
+            fileoutputstream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public static List<TierRecipe> recipeList = null;
     //public static ItemStack[] recipe = null;
     public static int tier = 1;
-
+    public static Map<String,StringBuilder> registerList = new HashMap<>();
     public static void print(EntityRollingStock trn) {
         StringBuilder builder;
         builder = new StringBuilder();
+
+
 
         if (trn instanceof Locomotive) {
             builder.append("package train.entity.trains;\n");
@@ -140,6 +165,11 @@ public class trainConverter {
             builder.append(" extends EntityRollingStock {\n\n");
         }
 
+        if(registerList.containsKey(outfolder.replace("/",""))){
+            registerList.get(outfolder.replace("/","")).append(", "+classname+"(null)");
+        } else {
+            registerList.put(outfolder.replace("/",""), new StringBuilder(classname+"(null)"));
+        }
 
 
         /**Item*/
