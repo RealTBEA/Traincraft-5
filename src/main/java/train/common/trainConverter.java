@@ -166,14 +166,14 @@ public class trainConverter {
         }
 
         if(registerList.containsKey(outfolder.replace("/",""))){
-            registerList.get(outfolder.replace("/","")).append(", "+classname+"(null)");
+            registerList.get(outfolder.replace("/","")).append(", new "+classname+"(null)");
         } else {
-            registerList.put(outfolder.replace("/",""), new StringBuilder(classname+"(null)"));
+            registerList.put(outfolder.replace("/",""), new StringBuilder("new "+classname+"(null)"));
         }
 
 
         /**Item*/
-        // builder.append("    public static final Item thisItem = new ItemRollingStock(new ");
+        // builder.append("    public static final Item thisItem = new ItemRollingStock(this, new ");
         String itemName = trn.getItem().getUnlocalizedName().replace("item.tc:", "");
         for (ItemIDs items : ItemIDs.values()) {
             if (items.className.equals("ItemRollingStock")) {
@@ -183,7 +183,7 @@ public class trainConverter {
             }
         }
 
-        builder.append("    public static final Item thisItem = new ItemRollingStock(Info.modID+\":+" + itemName + "\", Traincraft.tcTab); \n");
+        builder.append("    public static final Item thisItem = new ItemRollingStock(new "+classname+"(null), Info.modID+\":+" + itemName + "\", Traincraft.tcTab); \n");
 
 
         builder.append("    public ");
@@ -237,7 +237,7 @@ public class trainConverter {
         if(colours.size()>0){
             builder.append("    @Override\n");
             builder.append("    public String getDefaultSkin(){return \"");
-            builder.append(getRender(trn).getTextureFile(colours.get(0)).toString());
+            builder.append(colours.get(0));
             builder.append("\";}\n\n");
         }
 
