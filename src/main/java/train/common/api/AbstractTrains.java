@@ -370,6 +370,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setColor(String color) {
+        DebugUtil.println(color);
         if (SkinRegistry.get(this) != null && SkinRegistry.get(this).size()>0) {
             if (color.equals("-1") || !SkinRegistry.get(this).containsKey(color)) {
                 List<TransportSkin> skins = new ArrayList<>();
@@ -1108,6 +1109,20 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             case 1: {return new int[]{1,200,0xFF0000};}
             default: {return new int[]{1,10,0xCCCC11};}
         }
+    }
+
+    /**
+     * returns a list of TrainParticle, this uses the legacy system for steam/smoke etc,
+     *     but with an optimized container.
+     *     example:
+     *     return new TrainParticle[]{
+     *         new TrainParticle(type,density, new double[]{x,y,z}),
+     *         new TrainParticle(type,density, new double[]{x,y,z}),
+     *         etc
+     *         };
+     */
+    public TrainParticle[] getEffects(){
+        return null;
     }
 
     public ItemStack[] getRecipe(){return null;}

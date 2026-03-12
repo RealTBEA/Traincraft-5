@@ -232,14 +232,18 @@ public class trainConverter {
                 builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
 
             }
+        } else {
+            builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + getRender(trn).getTextureFile("").toString().replace("tc:", "") + "\" , new String[]{} ,\"default\", \"\");\n");
         }
         builder.append("    }\n\n");
+        builder.append("    @Override\n");
+        builder.append("    public String getDefaultSkin(){return \"");
         if(colours.size()>0){
-            builder.append("    @Override\n");
-            builder.append("    public String getDefaultSkin(){return \"");
             builder.append(colours.get(0));
-            builder.append("\";}\n\n");
+        } else {
+            builder.append("default");
         }
+        builder.append("\";}\n\n");
 
         builder.append("    @Override\n");
         builder.append("    public float transportTopSpeed(){return ");
@@ -418,7 +422,7 @@ public class trainConverter {
             builder.append("    public float[][] modelOffsets(){return new float[][]{{");
             builder.append(getRender(trn).getTrans()[0]);
             builder.append("f, ");
-            builder.append(-getRender(trn).getTrans()[1]);
+            builder.append(-getRender(trn).getTrans()[1]-0.5f);
             builder.append("f, ");
             builder.append(getRender(trn).getTrans()[2]);
             builder.append("f}};}\n");
@@ -429,9 +433,9 @@ public class trainConverter {
             builder.append("    public float[][] modelRotations(){return new float[][]{{");
             builder.append(getRender(trn).getRotate()[0]);
             builder.append("f, ");
-            builder.append(getRender(trn).getRotate()[1]-180);
+            builder.append(getRender(trn).getRotate()[1]);
             builder.append("f, ");
-            builder.append(getRender(trn).getRotate()[2]-180);
+            builder.append(getRender(trn).getRotate()[2]);
             builder.append("f}};}\n");
         } else {
             builder.append("@Override\n");
@@ -461,6 +465,40 @@ public class trainConverter {
         builder.append("    public float[] getHitboxSize(){return new float[]{");
         builder.append(-getTrain(trn).getBogieLocoPosition()+(trn.getOptimalDistance(null)*2f));
         builder.append("f,2.1f,1.1f};}\n");
+
+
+        builder.append("    public TrainParticle[] getEffects(){\n    return new TrainParticle[]{\n");
+        if(getRender(trn).getSmokeFX()!=null) {
+            for (double[] p : getRender(trn).getSmokeFX()) {
+                builder.append("            new TrainParticle(\"");
+                builder.append(getRender(trn).getSmokeType());
+                builder.append("\", ");
+                builder.append(getRender(trn).getSmokeIterations());
+                builder.append(", new double[]{");
+                builder.append(p[0]);
+                builder.append(", ");
+                builder.append(p[1]);
+                builder.append(", ");
+                builder.append(p[2]);
+                builder.append("}),\n");
+            }
+        }
+        if(getRender(trn).getExplosionFX()!=null) {
+            for (double[] p : getRender(trn).getExplosionFX()) {
+                builder.append("            new TrainParticle(\"");
+                builder.append(getRender(trn).getExplosionType());
+                builder.append("\", ");
+                builder.append(getRender(trn).getExplosionFXIterations());
+                builder.append(", new double[]{");
+                builder.append(p[0]);
+                builder.append(", ");
+                builder.append(p[1]);
+                builder.append(", ");
+                builder.append(p[2]);
+                builder.append("}),\n");
+            }
+        }
+        builder.append("    };\n    }");
 
 
         if(trn instanceof Locomotive) {

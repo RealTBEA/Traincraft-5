@@ -28,7 +28,7 @@ public interface RollingStockHelper {
      * the static instance may be stored in the class, or elsewhere, this just returns it
      * <p>
      * example of a static instance for the item:
-     * public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
+     * public static final Item thisItem = new ItemRollingStock(this, new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
      *
      * @return will reference the static instance of the item.
      */
