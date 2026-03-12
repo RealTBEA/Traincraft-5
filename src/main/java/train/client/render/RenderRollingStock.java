@@ -20,9 +20,7 @@ import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -178,9 +176,9 @@ public class RenderRollingStock extends Render {
         if(cart.getEffects()!=null){
             for(TrainParticle p : cart.getEffects()){
                 if(p.type.toLowerCase().contains("smoke")){
-                    renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, (ArrayList<double[]>)Arrays.asList(p.position), p.density, time, true);
+                    renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, Collections.singletonList(p.position), p.density, time, true);
                 } else {
-                    renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, (ArrayList<double[]>)Arrays.asList(p.position), p.density, true);
+                    renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, Collections.singletonList(p.position), p.density, true);
                 }
             }
         }
@@ -188,7 +186,7 @@ public class RenderRollingStock extends Render {
         GL11.glPopMatrix();
     }
 
-    private static void renderSmokeFX(EntityRollingStock cart, float yaw, float pitch, String smokeType, ArrayList<double[]> smokeFX, int smokeIterations, float time, boolean hasSmokeOnSlopes) {
+    private static void renderSmokeFX(EntityRollingStock cart, float yaw, float pitch, String smokeType, List<double[]> smokeFX, int smokeIterations, float time, boolean hasSmokeOnSlopes) {
         if (cart instanceof Locomotive && !((Locomotive) cart).isLocoTurnedOn()) {
             return;
         }
@@ -237,7 +235,7 @@ public class RenderRollingStock extends Render {
     }
 
 
-    private static void renderExplosionFX(EntityRollingStock cart, float yaw, float pitch, String explosionType, ArrayList<double[]> explosionFX, int explosionFXIterations, boolean hasSmokeOnSlopes) {
+    private static void renderExplosionFX(EntityRollingStock cart, float yaw, float pitch, String explosionType, List<double[]> explosionFX, int explosionFXIterations, boolean hasSmokeOnSlopes) {
         if (cart instanceof Locomotive && !((Locomotive) cart).isLocoTurnedOn()) return;
         float yawMod = yaw % 360;
         double pitchRads = Math.toDegrees(pitch);
@@ -290,15 +288,15 @@ public class RenderRollingStock extends Render {
     }
 
     public static ResourceLocation getTexture(AbstractTrains entity) {
-        if(entity.entity_data.getString("color")!=null) {
-            return new ResourceLocation(entity.entity_data.getString("color"));
-        }
         if(!entity.render_cache.color.equals(entity.getColor())){
             entity.render_cache.color=entity.getColor();
             entity.render_cache.rend=entity.getRender();
             entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
         }
 
+        if(entity.entity_data.getString("color")!=null) {
+            return new ResourceLocation(entity.entity_data.getString("color"));
+        }
         if (entity.render_cache.rend != null) {
             return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
         }

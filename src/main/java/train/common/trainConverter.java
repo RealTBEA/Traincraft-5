@@ -498,7 +498,7 @@ public class trainConverter {
                 builder.append("}),\n");
             }
         }
-        builder.append("    };\n    }");
+        builder.append("    };\n    }\n\n");
 
 
         if(trn instanceof Locomotive) {
