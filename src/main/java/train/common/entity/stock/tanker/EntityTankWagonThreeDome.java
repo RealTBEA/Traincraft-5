@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTankWagonThreeDome extends LiquidTank {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tank_three_dome", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTankWagonThreeDome(null), Info.modID+":+train_tank_three_dome", Traincraft.tcTab); 
     public EntityTankWagonThreeDome(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTankWagonThreeDome(World world) {
@@ -37,7 +37,7 @@ public class EntityTankWagonThreeDome extends LiquidTank {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/tanker_three_dome_Green.png";}
+    public String getDefaultSkin(){return "Green";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,9 +87,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTankWagonThreeDome()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.17f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.67f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -97,7 +97,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{5.400000095367432f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{90000};}
 }
 

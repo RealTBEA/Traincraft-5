@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoDiesel44TonSwitcher extends DieselTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_44tonner", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoDiesel44TonSwitcher(null), Info.modID+":+train_44tonner", Traincraft.tcTab); 
     public EntityLocoDiesel44TonSwitcher(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoDiesel44TonSwitcher(World world) {
@@ -37,7 +37,7 @@ public class EntityLocoDiesel44TonSwitcher extends DieselTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/loco_44tonswitcher_Black.png";}
+    public String getDefaultSkin(){return "Black";}
 
     @Override
     public float transportTopSpeed(){return 56;}
@@ -87,9 +87,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLoco44TonSwitcher()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-2.75f, 0.425f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-2.75f, -0.07499999f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -97,7 +97,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.75f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("smoke", 4, new double[]{0.6, 1.55, 0.0}),
+            new TrainParticle("smoke", 4, new double[]{2.0, 1.55, 0.0}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
     @Override

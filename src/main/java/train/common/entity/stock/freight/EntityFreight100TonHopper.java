@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFreight100TonHopper extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_100_ton_hopper", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFreight100TonHopper(null), Info.modID+":+train_100_ton_hopper", Traincraft.tcTab); 
     public EntityFreight100TonHopper(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFreight100TonHopper(World world) {
@@ -39,7 +39,7 @@ public class EntityFreight100TonHopper extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/freight_100tonhopper_Red.png";}
+    public String getDefaultSkin(){return "Red";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -89,9 +89,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.Model100TonHopper()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.1f, -0.0f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.1f, -0.5f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -99,7 +99,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{5.800000190734863f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

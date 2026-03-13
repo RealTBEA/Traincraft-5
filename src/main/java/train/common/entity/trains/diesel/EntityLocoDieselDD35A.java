@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoDieselDD35A extends DieselTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_dd35a", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoDieselDD35A(null), Info.modID+":+train_dd35a", Traincraft.tcTab); 
     public EntityLocoDieselDD35A(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoDieselDD35A(World world) {
@@ -37,7 +37,7 @@ public class EntityLocoDieselDD35A extends DieselTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/dd35a_Orange.png";}
+    public String getDefaultSkin(){return "Orange";}
 
     @Override
     public float transportTopSpeed(){return 145;}
@@ -87,9 +87,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelDD35A()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-5.0f, -0.18f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-5.0f, -0.68f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -97,7 +97,12 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.349999904632568f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("smoke", 4, new double[]{3.9, 1.6, 0.0}),
+            new TrainParticle("smoke", 4, new double[]{-0.4, 1.6, 0.0}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
     @Override

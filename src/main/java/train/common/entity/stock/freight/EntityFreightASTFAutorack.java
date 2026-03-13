@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFreightASTFAutorack extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_autorack", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFreightASTFAutorack(null), Info.modID+":+train_autorack", Traincraft.tcTab); 
     public EntityFreightASTFAutorack(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFreightASTFAutorack(World world) {
@@ -32,7 +32,11 @@ public class EntityFreightASTFAutorack extends Freight {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/astf_autorack.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -82,9 +86,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelASTFAutorack()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-1.0f, -0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-1.0f, -0.7f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -92,7 +96,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{8.699999809265137f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

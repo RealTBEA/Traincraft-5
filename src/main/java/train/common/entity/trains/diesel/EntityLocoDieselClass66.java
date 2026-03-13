@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoDieselClass66 extends DieselTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_ewsclass66", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoDieselClass66(null), Info.modID+":+train_ewsclass66", Traincraft.tcTab); 
     public EntityLocoDieselClass66(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoDieselClass66(World world) {
@@ -38,7 +38,7 @@ public class EntityLocoDieselClass66 extends DieselTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/Class66_Pink.png";}
+    public String getDefaultSkin(){return "Pink";}
 
     @Override
     public float transportTopSpeed(){return 121;}
@@ -88,9 +88,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelEWSClass66()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-3.0f, -0.65f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-3.0f, -1.15f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -98,7 +98,11 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.5f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 2, new double[]{0.9, 1.4, 0.0}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
     @Override

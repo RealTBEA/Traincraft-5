@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteam4_4_0 extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_steam_normal", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteam4_4_0(null), Info.modID+":+train_steam_normal", Traincraft.tcTab); 
     public EntityLocoSteam4_4_0(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteam4_4_0(World world) {
@@ -42,7 +42,7 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/4-4-0-loco_Red.png";}
+    public String getDefaultSkin(){return "Red";}
 
     @Override
     public float transportTopSpeed(){return 50;}
@@ -92,9 +92,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLoco()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.66f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.66f, -0.060000002f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, -180.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 0.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -102,7 +102,12 @@ return 1;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.200000047683716f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 3, new double[]{1.6, 2.05, 0.0}),
+            new TrainParticle("explode", 4, new double[]{1.56, -0.2, 0.8}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

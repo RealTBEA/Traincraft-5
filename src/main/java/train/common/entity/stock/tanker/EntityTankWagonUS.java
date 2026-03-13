@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTankWagonUS extends LiquidTank {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tank_us_2", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTankWagonUS(null), Info.modID+":+train_tank_us_2", Traincraft.tcTab); 
     public EntityTankWagonUS(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTankWagonUS(World world) {
@@ -45,7 +45,7 @@ public class EntityTankWagonUS extends LiquidTank {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/tankWagonUS_Black.png";}
+    public String getDefaultSkin(){return "Black";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -95,7 +95,7 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTankWagonUS()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.47f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.030000001f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -105,7 +105,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.200000047683716f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{70000};}
 }
 

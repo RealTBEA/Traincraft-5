@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTender_C41 extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tender_c41", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTender_C41(null), Info.modID+":+train_tender_c41", Traincraft.tcTab); 
     public EntityTender_C41(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTender_C41(World world) {
@@ -32,7 +32,11 @@ public class EntityTender_C41 extends Tender {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/C41Tender.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -82,9 +86,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTenderC41()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.1f, -0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.1f, -0.7f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -92,7 +96,10 @@ return 1;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.5f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{16000};}
 }
 

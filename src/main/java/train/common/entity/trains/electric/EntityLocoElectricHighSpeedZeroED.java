@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_high_speed_loco_zeroed", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoElectricHighSpeedZeroED(null), Info.modID+":+train_high_speed_loco_zeroed", Traincraft.tcTab); 
     public EntityLocoElectricHighSpeedZeroED(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoElectricHighSpeedZeroED(World world) {
@@ -32,7 +32,11 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/locoHighSpeedZeroED.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 240;}
@@ -82,7 +86,7 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoHighSpeedZeroED()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-1.7f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-1.7f, -0.060000002f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -92,7 +96,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.520000004768372f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "electric";}
     @Override

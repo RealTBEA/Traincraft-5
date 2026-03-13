@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteamMogulBlue extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_mogul", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamMogulBlue(null), Info.modID+":+train_mogul", Traincraft.tcTab); 
     public EntityLocoSteamMogulBlue(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteamMogulBlue(World world) {
@@ -41,7 +41,7 @@ public class EntityLocoSteamMogulBlue extends SteamTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/locoMogul_Blue.png";}
+    public String getDefaultSkin(){return "Blue";}
 
     @Override
     public float transportTopSpeed(){return 65;}
@@ -91,9 +91,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoMogul()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.6f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.6f, -0.060000002f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, -180.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 0.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -101,7 +101,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.5999999761581423f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 3, new double[]{1.55, 1.95, 0.0}),
+            new TrainParticle("explode", 2, new double[]{1.45, -0.2, 0.8}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTenderSmall extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tender", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTenderSmall(null), Info.modID+":+train_tender", Traincraft.tcTab); 
     public EntityTenderSmall(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTenderSmall(World world) {
@@ -40,7 +40,7 @@ public class EntityTenderSmall extends Tender {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/tender2_Black.png";}
+    public String getDefaultSkin(){return "Black";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -90,9 +90,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.5f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, -180.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 0.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.75f, 0.75f, 0.75f}};}
     //these are separated for being fiddly.
@@ -100,7 +100,10 @@ return 1;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{1.600000023841858f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{5000};}
 }
 

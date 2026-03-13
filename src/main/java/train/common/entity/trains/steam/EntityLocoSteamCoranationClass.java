@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteamCoranationClass extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_coronationclass", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamCoranationClass(null), Info.modID+":+train_coronationclass", Traincraft.tcTab); 
     public EntityLocoSteamCoranationClass(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteamCoranationClass(World world) {
@@ -32,7 +32,11 @@ public class EntityLocoSteamCoranationClass extends SteamTrain {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/CoranationClass.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 183;}
@@ -82,9 +86,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelCoranationClass()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-3.8f, -0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-3.8f, -0.7f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -92,7 +96,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.799999952316284f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 3, new double[]{5.45, 1.9, 0.0}),
+            new TrainParticle("explode", 2, new double[]{4.8, 0.15, 0.5}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

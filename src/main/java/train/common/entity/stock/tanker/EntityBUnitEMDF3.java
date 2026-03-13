@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityBUnitEMDF3 extends LiquidTank {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_emdf3b", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityBUnitEMDF3(null), Info.modID+":+train_emdf3b", Traincraft.tcTab); 
     public EntityBUnitEMDF3(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityBUnitEMDF3(World world) {
@@ -42,7 +42,7 @@ public class EntityBUnitEMDF3 extends LiquidTank {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/emdf3b_Yellow.png";}
+    public String getDefaultSkin(){return "Yellow";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -92,9 +92,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelEMDF3B()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.1f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.6f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -102,7 +102,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.400000095367432f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{12000};}
 }
 

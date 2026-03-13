@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteamKingClass extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+KingClass", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamKingClass(null), Info.modID+":+KingClass", Traincraft.tcTab); 
     public EntityLocoSteamKingClass(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteamKingClass(World world) {
@@ -38,7 +38,7 @@ public class EntityLocoSteamKingClass extends SteamTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/King_Class_Locomotive_Green.png";}
+    public String getDefaultSkin(){return "Green";}
 
     @Override
     public float transportTopSpeed(){return 174;}
@@ -88,9 +88,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelKingClass()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-1.75f, -0.15f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-1.75f, -0.65f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{1.0f, 1.0f, 1.0f}};}
     //these are separated for being fiddly.
@@ -98,7 +98,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{5.750000005960464f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 20, new double[]{4.8, 1.6, 0.0}),
+            new TrainParticle("explode", 2, new double[]{3.6, -0.4, 0.8}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

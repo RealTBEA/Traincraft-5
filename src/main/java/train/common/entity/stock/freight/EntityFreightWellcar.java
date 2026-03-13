@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFreightWellcar extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_freight_wellcar", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFreightWellcar(null), Info.modID+":+train_freight_wellcar", Traincraft.tcTab); 
     public EntityFreightWellcar(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFreightWellcar(World world) {
@@ -51,7 +51,7 @@ public class EntityFreightWellcar extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/wellcar_Blue.png";}
+    public String getDefaultSkin(){return "Blue";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -101,9 +101,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelWellcar()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.0f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.5f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -111,7 +111,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.5999999046325684f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

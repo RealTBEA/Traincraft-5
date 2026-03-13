@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityPassengerDenverRioGrandeCombo extends EntityRollingStock implements IPassenger {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+denverriogrande_combo", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityPassengerDenverRioGrandeCombo(null), Info.modID+":+denverriogrande_combo", Traincraft.tcTab); 
     public EntityPassengerDenverRioGrandeCombo(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityPassengerDenverRioGrandeCombo(World world) {
@@ -38,7 +38,7 @@ public class EntityPassengerDenverRioGrandeCombo extends EntityRollingStock impl
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/drg_combo_Yellow.png";}
+    public String getDefaultSkin(){return "Yellow";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -88,9 +88,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelDRGCombo()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.14f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.64f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -98,7 +98,10 @@ return 1;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{6.300000190734863f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFreightKClassRailBox extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_k_class_railbox", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFreightKClassRailBox(null), Info.modID+":+train_k_class_railbox", Traincraft.tcTab); 
     public EntityFreightKClassRailBox(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFreightKClassRailBox(World world) {
@@ -37,7 +37,7 @@ public class EntityFreightKClassRailBox extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/KClassRailBox_Yellow.png";}
+    public String getDefaultSkin(){return "Yellow";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,9 +87,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelKClassRailBox()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-1.5f, -0.1f, 0.125f}};}
+    public float[][] modelOffsets(){return new float[][]{{-1.5f, -0.6f, 0.125f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -97,7 +97,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.450000047683716f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

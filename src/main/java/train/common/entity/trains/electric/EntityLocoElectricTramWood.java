@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoElectricTramWood extends ElectricTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tram", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoElectricTramWood(null), Info.modID+":+train_tram", Traincraft.tcTab); 
     public EntityLocoElectricTramWood(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoElectricTramWood(World world) {
@@ -32,7 +32,11 @@ public class EntityLocoElectricTramWood extends ElectricTrain {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/tram.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 55;}
@@ -82,9 +86,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTram()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.8f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.8f, -0.060000002f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, -180.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 0.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -92,7 +96,10 @@ return 1;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.399999976158142f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "electric";}
     @Override

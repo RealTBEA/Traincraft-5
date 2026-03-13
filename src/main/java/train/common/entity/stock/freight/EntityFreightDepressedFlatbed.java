@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFreightDepressedFlatbed extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_freight_depressed_flatbed", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFreightDepressedFlatbed(null), Info.modID+":+train_freight_depressed_flatbed", Traincraft.tcTab); 
     public EntityFreightDepressedFlatbed(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFreightDepressedFlatbed(World world) {
@@ -39,7 +39,7 @@ public class EntityFreightDepressedFlatbed extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/depressed_flatbed_Black.png";}
+    public String getDefaultSkin(){return "Black";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -89,9 +89,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelDepressedFlatbed()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.1f, -0.15f, -0.075f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.1f, -0.65f, -0.075f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -99,7 +99,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.599999904632568f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

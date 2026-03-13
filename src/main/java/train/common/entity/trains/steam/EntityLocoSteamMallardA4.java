@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteamMallardA4 extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_loco_a4_mallard", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamMallardA4(null), Info.modID+":+train_loco_a4_mallard", Traincraft.tcTab); 
     public EntityLocoSteamMallardA4(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteamMallardA4(World world) {
@@ -40,7 +40,7 @@ public class EntityLocoSteamMallardA4 extends SteamTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/locoA4_UK_Blue.png";}
+    public String getDefaultSkin(){return "Blue";}
 
     @Override
     public float transportTopSpeed(){return 203;}
@@ -90,9 +90,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelA4Locomotive()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-3.0f, -0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-3.0f, -0.7f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.975f, 0.975f, 0.975f}};}
     //these are separated for being fiddly.
@@ -100,7 +100,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.0f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 20, new double[]{4.8, 1.95, 0.0}),
+            new TrainParticle("explode", 2, new double[]{4.9, -0.4, 0.8}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTenderGS4 extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+GS4_tender", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTenderGS4(null), Info.modID+":+GS4_tender", Traincraft.tcTab); 
     public EntityTenderGS4(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTenderGS4(World world) {
@@ -37,7 +37,7 @@ public class EntityTenderGS4 extends Tender {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/GS4_tender_Orange.png";}
+    public String getDefaultSkin(){return "Orange";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,9 +87,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelGS4Tender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.15f, -0.05f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.65f, -0.05f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.8f, 1.0f, 0.8f}};}
     //these are separated for being fiddly.
@@ -97,7 +97,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.199999809265137f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{18000};}
 }
 

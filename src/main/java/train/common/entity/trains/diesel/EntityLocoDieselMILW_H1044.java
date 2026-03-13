@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoDieselMILW_H1044 extends DieselTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+MILW_H1044", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoDieselMILW_H1044(null), Info.modID+":+MILW_H1044", Traincraft.tcTab); 
     public EntityLocoDieselMILW_H1044(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoDieselMILW_H1044(World world) {
@@ -43,7 +43,7 @@ public class EntityLocoDieselMILW_H1044 extends DieselTrain {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/MILW_H1044_Orange.png";}
+    public String getDefaultSkin(){return "Orange";}
 
     @Override
     public float transportTopSpeed(){return 97;}
@@ -93,9 +93,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelMILW_H1044()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.06f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.56f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -103,7 +103,11 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{6.000000023841858f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 4, new double[]{3.7, 1.7, 0.0}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
     @Override

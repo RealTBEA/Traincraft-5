@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoDieselChME3 extends DieselTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_chme3", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoDieselChME3(null), Info.modID+":+train_chme3", Traincraft.tcTab); 
     public EntityLocoDieselChME3(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoDieselChME3(World world) {
@@ -32,7 +32,11 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/chme3.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 95;}
@@ -82,7 +86,7 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelChME3()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.5f, 0.47f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.5f, -0.030000001f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -92,7 +96,11 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.2f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("smoke", 4, new double[]{0.6, 1.55, 0.0}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
     @Override

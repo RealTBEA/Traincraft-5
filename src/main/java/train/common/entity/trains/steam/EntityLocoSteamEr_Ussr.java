@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityLocoSteamEr_Ussr extends SteamTrain {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_ussr", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamEr_Ussr(null), Info.modID+":+train_ussr", Traincraft.tcTab); 
     public EntityLocoSteamEr_Ussr(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityLocoSteamEr_Ussr(World world) {
@@ -32,7 +32,11 @@ public class EntityLocoSteamEr_Ussr extends SteamTrain {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/locoEr_Ussr.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 80;}
@@ -82,7 +86,7 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoEr_Ussr()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.75f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.75f, -0.060000002f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -92,7 +96,12 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.759999942779541f,2.1f,1.1f};}
-    //Train specific stuff
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+            new TrainParticle("largesmoke", 3, new double[]{3.45, 1.9, 0.0}),
+            new TrainParticle("explode", 2, new double[]{3.4, -0.2, 0.8}),
+    };
+    }    //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}
     @Override

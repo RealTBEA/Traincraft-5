@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityBulkheadFlatCart extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_bulkheadflat_wood", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityBulkheadFlatCart(null), Info.modID+":+train_bulkheadflat_wood", Traincraft.tcTab); 
     public EntityBulkheadFlatCart(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityBulkheadFlatCart(World world) {
@@ -38,7 +38,7 @@ public class EntityBulkheadFlatCart extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/BulkheadFlat_Brown.png";}
+    public String getDefaultSkin(){return "Brown";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -88,9 +88,9 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelBulkheadFlat()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.1f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.6f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
@@ -98,7 +98,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.599999904632568f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

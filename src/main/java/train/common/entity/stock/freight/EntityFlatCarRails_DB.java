@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityFlatCarRails_DB extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_transport_rail", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityFlatCarRails_DB(null), Info.modID+":+train_transport_rail", Traincraft.tcTab); 
     public EntityFlatCarRails_DB(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityFlatCarRails_DB(World world) {
@@ -37,7 +37,7 @@ public class EntityFlatCarRails_DB extends Freight {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/flatCarRails_DB_Red.png";}
+    public String getDefaultSkin(){return "Red";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,7 +87,7 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelFlatCarRails_DB()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.060000002f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -97,7 +97,10 @@ return 3;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.680000066757202f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

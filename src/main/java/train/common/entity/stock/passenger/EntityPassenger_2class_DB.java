@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityPassenger_2class_DB extends EntityRollingStock implements IPassenger {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_passenger_6", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityPassenger_2class_DB(null), Info.modID+":+train_passenger_6", Traincraft.tcTab); 
     public EntityPassenger_2class_DB(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityPassenger_2class_DB(World world) {
@@ -37,7 +37,7 @@ public class EntityPassenger_2class_DB extends EntityRollingStock implements IPa
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/passenger_2class_DB_Green.png";}
+    public String getDefaultSkin(){return "Green";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,7 +87,7 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelPassenger_2class_DB()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.060000002f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -97,7 +97,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.799999952316284f,2.1f,1.1f};}
-
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }
 }
 
 

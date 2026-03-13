@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTenderFowler4F extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+Fowler 4F Tender", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTenderFowler4F(null), Info.modID+":+Fowler 4F Tender", Traincraft.tcTab); 
     public EntityTenderFowler4F(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTenderFowler4F(World world) {
@@ -32,7 +32,11 @@ public class EntityTenderFowler4F extends Tender {
 
     @Override
     public void registerSkins(){
+        SkinRegistry.addSkin(this.getClass(), Info.modID,"textures/trains/Fowler_4F_Tender.png" , new String[]{} ,"default", "");
     }
+
+    @Override
+    public String getDefaultSkin(){return "default";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -82,9 +86,9 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelFowler4FTender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-5.25f, 0.51585f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-5.25f, 0.015850008f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
@@ -92,7 +96,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.5999999046325684f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{15000};}
 }
 

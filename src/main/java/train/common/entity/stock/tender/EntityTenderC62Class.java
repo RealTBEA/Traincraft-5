@@ -15,7 +15,7 @@ import train.common.library.ItemIDs;
 
 public class EntityTenderC62Class extends Tender {
 
-    public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tender_c62_class", Traincraft.tcTab); 
+    public static final Item thisItem = new ItemRollingStock(new EntityTenderC62Class(null), Info.modID+":+train_tender_c62_class", Traincraft.tcTab); 
     public EntityTenderC62Class(World world, double x, double y, double z) {
     super(world, x, y, z); }
     public EntityTenderC62Class(World world) {
@@ -37,7 +37,7 @@ public class EntityTenderC62Class extends Tender {
     }
 
     @Override
-    public String getDefaultSkin(){return "tc:textures/trains/c62_tender_Black.png";}
+    public String getDefaultSkin(){return "Black";}
 
     @Override
     public float transportTopSpeed(){return 0;}
@@ -87,7 +87,7 @@ return 2;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelC62Tender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.42f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.08000001f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -97,7 +97,10 @@ return 2;
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{4.0f,2.1f,1.1f};}
-    @Override
+    public TrainParticle[] getEffects(){
+    return new TrainParticle[]{
+    };
+    }    @Override
     public int[] getTankCapacity(){return new int[]{14000};}
 }
 
