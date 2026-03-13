@@ -12,16 +12,17 @@ import net.minecraftforge.oredict.OreDictionary;
 import train.client.gui.GuiTrainCraftingBlock;
 import train.common.core.interfaces.ITCRecipe;
 import train.common.inventory.TrainCraftingManager;
-import train.common.recipes.ShapedTrainRecipes;
-import train.common.recipes.ShapelessTrainRecipe;
+import train.common.recipes.ITCRecipe.ShapedTrainRecipes;
+import train.common.recipes.ITCRecipe.ShapelessTrainRecipe;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
-    private final List<ITCRecipe> recipeListWB = workbenchListCleaner(TrainCraftingManager.getInstance().getShapedRecipes());
+    private List<ShapedTrainRecipes> recipeListWB = workbenchListCleaner(TrainCraftingManager.getInstance().getShapedRecipes());
 
     private CachedShapedRecipe getShape(ShapedTrainRecipes recipe) {
         CachedShapedRecipe shape = new CachedShapedRecipe(0, 0, null, recipe.getRecipeOutput());
@@ -30,7 +31,17 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
                 if (recipe.recipeItems[y * 3 + x] == null) {
                     continue;
                 }
-                PositionedStack stack = new PositionedStack(recipe.recipeItems[y * 3 + x], 25 + x * 18, 6 + y * 18);
+
+                Object filteredObject = recipe.recipeItems [y * 3 + x];
+
+
+
+                if (filteredObject instanceof String)
+                {
+                    filteredObject = ShapedTrainRecipes.getOreVariants((String) filteredObject);
+                }
+
+                PositionedStack stack = new PositionedStack(filteredObject, 25 + x * 18, 6 + y * 18);
                 stack.setMaxSize(1);
                 shape.ingredients.add(stack);
             }
@@ -57,7 +68,8 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
         /**
          * @param width
          * @param height
-         * @param items  an ItemStack[] or ItemStack[][]
+         * @param items
+         * an ItemStack[] or ItemStack[][]
          */
         public void setIngredients(int width, int height, Object[] items) {
             for (int x = 0; x < width; x++) {
@@ -73,7 +85,7 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
 
         @Override
         public List<PositionedStack> getIngredients() {
-            return getCycledIngredients(cycleticks / 20, ingredients);
+            return getCycledIngredients(cycleticks % 20, ingredients);
         }
 
         public PositionedStack getResult() {
@@ -97,18 +109,51 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
         @Override
         public List<PositionedStack> getCycledIngredients(int cycle, List<PositionedStack> ingredients) {
             cycleTicks++;
-            for (int itemIndex = 0; itemIndex < ingredients.size(); itemIndex++) {
+            final int CYCLE_DELAY = 15;
+            for (int itemIndex = 0; itemIndex < ingredients.size(); itemIndex++)
+            {
+                PositionedStack stack = ingredients.get(itemIndex);
+                ItemStack item = stack.item;
 
-                String oreName = OreDictionary.getOreName(OreDictionary.getOreID(ingredients.get(itemIndex).item));
-                if (oreName.equals("ingotSteel") || oreName.equals("ingotIron") || oreName.equals("ingotCopper") || oreName.equals("dustPlastic") || oreName.equals("dustCoal")) {
-                    ArrayList list = OreDictionary.getOres(OreDictionary.getOreName(OreDictionary.getOreID(ingredients.get(itemIndex).item)));
-                    Random rand = new Random(cycle + System.currentTimeMillis());
-                    if (cycleTicks % 15 == 0) {
-                        int stackSize = ingredients.get(itemIndex).item.stackSize;
-                        ingredients.get(itemIndex).item = (ItemStack) list.get(Math.abs(rand.nextInt()) % list.size());
-                        ingredients.get(itemIndex).item.stackSize = stackSize;
+                // Get the OreDictionary name
+                String oreName = OreDictionary.getOreName(OreDictionary.getOreID(item));
+
+                // Check if we need to cycle ore-dictionary variants
+                if (oreName != null)
+                {
+                    List<ItemStack> oreList = OreDictionary.getOres(oreName);
+
+                    // Apply strict filtering for dyes: only include stacks with the same metadata
+                    if (oreName.startsWith("dye")) {
+                        final int itemMeta = item.getItemDamage(); // current item's metadata
+                        oreList = oreList.stream()
+                                .filter(s -> {
+                                    int meta = s.getItemDamage();
+                                    // Match only if metadata is the same OR the OreDictionary entry is not a wildcard
+                                    return meta == itemMeta || meta != OreDictionary.WILDCARD_VALUE;
+                                })
+                                .map(ItemStack::copy)
+                                .collect(Collectors.toList());
                     }
-                } else {
+
+                    // Only cycle every 15 ticks
+                    if (cycleTicks % CYCLE_DELAY == 0 && !oreList.isEmpty()) {
+
+                        // Keep the original stack size
+                        int stackSize = item.stackSize;
+
+                        // Use a stable index for cycling
+                        int index = Math.floorMod((cycle + itemIndex), oreList.size());
+
+                        // Assign a new item but preserve size
+                        ItemStack next = oreList.get(index).copy();
+                        next.stackSize = stackSize;
+
+                        stack.item = next;
+                    }
+                }
+                else
+                {
                     randomRenderPermutation(ingredients.get(itemIndex), cycle + itemIndex);
                 }
             }
@@ -119,9 +164,9 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        for (ITCRecipe recipe : recipeListWB) {
+        for (ShapedTrainRecipes recipe : recipeListWB) {
             if (NEIClientUtils.areStacksSameTypeCrafting(recipe.getRecipeOutput(), result)) {
-                this.arecipes.add(getShape((ShapedTrainRecipes) recipe));
+                this.arecipes.add(getShape(recipe));
             }
         }
     }
@@ -137,7 +182,8 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
     }
 
     @Override
-    public String getGuiTexture() {
+    public String getGuiTexture()
+    {
         return "tc:textures/gui/crafting_table.png";
     }
 
@@ -153,11 +199,25 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
 
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        for (ITCRecipe recipe : recipeListWB) {
-            for (ItemStack source : ((ShapedTrainRecipes) recipe).recipeItems) {
-                if (NEIClientUtils.areStacksSameTypeCrafting(source, ingredient)) {
-                    this.arecipes.add(getShape((ShapedTrainRecipes) recipe));
-                    break;
+        for (ShapedTrainRecipes recipe : recipeListWB) {
+            for (Object source : recipe.recipeItems)
+            {
+                if (source instanceof ItemStack)
+                {
+                    if (NEIClientUtils.areStacksSameTypeCrafting((ItemStack)source, ingredient)) {
+                        this.arecipes.add(getShape(recipe));
+                        break;
+                    }
+                }
+                else if(source instanceof String)
+                {
+                    for (ItemStack stack : ShapedTrainRecipes.getOreVariants((String) source))
+                    {
+                        if (NEIClientUtils.areStacksSameTypeCrafting(stack, ingredient)) {
+                            this.arecipes.add(getShape(recipe));
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -166,31 +226,41 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals("train workbench") && getClass() == NEITraincraftWorkbenchRecipePlugin.class) {
-            for (ITCRecipe recipe : recipeListWB) {
-                this.arecipes.add(getShape((ShapedTrainRecipes) recipe));
+            for (ShapedTrainRecipes recipe : recipeListWB) {
+                this.arecipes.add(getShape(recipe));
             }
-        } else {
+        }
+        else {
             super.loadCraftingRecipes(outputId, results);
         }
     }
 
-    public static List<ITCRecipe> workbenchListCleaner(List<?> recipeList) {
-        List<Item> outputList = new ArrayList<>();
-        List<ITCRecipe> cleanedList = new ArrayList<>();
-
-        for (Object o : recipeList) {
-            if (o instanceof ShapedTrainRecipes) {
-                if (!outputList.contains(((ShapedTrainRecipes) o).getRecipeOutput().getItem())) {
-                    cleanedList.add((ShapedTrainRecipes) o);
+    public static List workbenchListCleaner(List recipeList) {
+        ArrayList outputList = new ArrayList();
+        ArrayList cleanedList = new ArrayList();
+        for (int i = 0; i < recipeList.size(); i++) {
+            if (recipeList.get(i) instanceof ShapedTrainRecipes) {
+                if (outputList != null) {
+                    if (!outputList.contains(((ShapedTrainRecipes) recipeList.get(i)).getRecipeOutput().getItem())) {
+                        cleanedList.add(recipeList.get(i));
+                    }
                 }
-                outputList.add(((ShapedTrainRecipes) o).getRecipeOutput().getItem());
+                else {
+                    cleanedList.add(recipeList.get(i));
+                }
+                outputList.add(((ShapedTrainRecipes) recipeList.get(i)).getRecipeOutput().getItem());
             }
-            if (o instanceof ShapelessTrainRecipe) {
+            if (recipeList.get(i) instanceof ShapelessTrainRecipe) {
 
-                if (!outputList.contains(((ShapelessTrainRecipe) o).getRecipeOutput().getItem())) {
-                    cleanedList.add((ShapelessTrainRecipe) o);
+                if (outputList != null) {
+                    if (!outputList.contains(((ShapelessTrainRecipe) recipeList.get(i)).getRecipeOutput().getItem())) {
+                        cleanedList.add(recipeList.get(i));
+                    }
                 }
-                outputList.add(((ShapelessTrainRecipe) o).getRecipeOutput().getItem());
+                else {
+                    cleanedList.add(recipeList.get(i));
+                }
+                outputList.add(((ShapelessTrainRecipe) recipeList.get(i)).getRecipeOutput().getItem());
             }
         }
         return cleanedList;

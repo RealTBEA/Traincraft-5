@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.common.core.interfaces.ITCRecipe;
 import train.common.recipes.OpenHearthFurnaceRecipe;
-import train.common.recipes.ShapedTrainRecipes;
-import train.common.recipes.ShapelessTrainRecipe;
+import train.common.recipes.ITCRecipe.ShapedTrainRecipes;
+import train.common.recipes.ITCRecipe.ShapelessTrainRecipe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,29 +20,40 @@ public class TrainCraftingManager {
 	public static final TrainCraftingManager instance = new TrainCraftingManager();
 
 	/** A list of all the recipes added */
-	private final List<ITCRecipe> recipes = new ArrayList<>();
-	
-	private final ArrayList<ShapedTrainRecipes> shapedRecipes = new ArrayList<>();
+	private List recipes = new ArrayList();
+
+	public void AddShapedRecipe(ShapedTrainRecipes shapedTrainRecipe)
+	{
+		this.shapedRecipes.add(shapedTrainRecipe);
+	}
+
+	public void AddRecipe(ShapedTrainRecipes shapedTrainRecipe)
+	{
+		this.recipes.add(shapedTrainRecipe);
+	}
+
+	private final ArrayList<ShapedTrainRecipes> shapedRecipes = new ArrayList<ShapedTrainRecipes>();
 
 	/** Recipes for openHearthFurnace */
-	private final HashMap<Integer, ArrayList<Integer>> hearthFurnaceMap = new HashMap<>();
-	private final ArrayList<OpenHearthFurnaceRecipe> hearthFurnaceRecipes = new ArrayList<>();
-	private final HashMap<Integer, Float> hearthFurnaceXpMap = new HashMap<>();
-	
+	private final HashMap<Integer, ArrayList<Integer>> hearthFurnaceMap = new HashMap();
+	private final ArrayList<OpenHearthFurnaceRecipe> hearthFurnaceRecipes = new ArrayList<OpenHearthFurnaceRecipe>();
+	private final HashMap<Integer, Float> hearthFurnaceXpMap = new HashMap();
+
 	public static final TrainCraftingManager getInstance() {
 		return instance;
 	}
 
 	private TrainCraftingManager() {}
 
-	public void addRecipe(ItemStack par1ItemStack, Object... obj) {
+
+	public void addRecipe(ItemStack output, Object... recipe) {
 		String var3 = "";
-		int var4 = 0;
+		int idx = 0;
 		int var5 = 0;
 		int var6 = 0;
 
-		if (obj[var4] instanceof String[]) {
-			String[] var7 = (String[]) obj[var4++];
+		if (recipe[idx] instanceof String[]) {
+			String[] var7 = (String[]) recipe[idx++];
 
 			for (int var8 = 0; var8 < var7.length; ++var8) {
 				String var9 = var7[var8];
@@ -52,47 +63,62 @@ public class TrainCraftingManager {
 			}
 		}
 		else {
-			while (obj[var4] instanceof String) {
-				String var11 = (String) obj[var4++];
+			while (recipe[idx] instanceof String) {
+				String var11 = (String) recipe[idx++];
 				++var6;
 				var5 = var11.length();
 				var3 = var3 + var11;
 			}
 		}
-		HashMap var12;
 
-		for (var12 = new HashMap(); var4 < obj.length; var4 += 2) {
-			Character var13 = (Character) obj[var4];
-			ItemStack var14 = null;
+		HashMap<Character, Object> itemMap = new HashMap<Character, Object>();
 
-			if (obj[var4 + 1] instanceof Item) {
-				var14 = new ItemStack((Item) obj[var4 + 1]);
+		for (;idx < recipe.length; idx += 2)
+		{
+			Character chr = (Character) recipe[idx];
+
+			Object in = recipe[idx + 1];
+
+			if (in instanceof Item) {
+				itemMap.put(chr, new ItemStack((Item) in));
 			}
-			else if (obj[var4 + 1] instanceof Block) {
-				var14 = new ItemStack((Block) obj[var4 + 1], 1, -1);
+			else if (in instanceof Block) {
+				itemMap.put(chr, new ItemStack((Block) in, 1, -1));
 			}
-			else if (obj[var4 + 1] instanceof ItemStack) {
-				var14 = (ItemStack) obj[var4 + 1];
+			else if (in instanceof ItemStack) {
+				itemMap.put(chr, (ItemStack) in);
+			}
+			else if (in instanceof String)
+			{
+				itemMap.put(chr, in);
 			}
 
-			var12.put(var13, var14);
 		}
 
-		ItemStack[] var15 = new ItemStack[/* var5 * var6 */9];
+		Object[] var15 = new Object[9];
 
 		for (int var16 = 0; var16 < var5 * var6; ++var16) {
 			char var10 = var3.charAt(var16);
 
-			if (var12.containsKey(var10)) {
-				var15[var16] = ((ItemStack) var12.get(var10)).copy();
-			}
-			else {
+			if (itemMap.containsKey(var10)) {
+
+				Object ingredient = itemMap.get(var10);
+
+				if (ingredient instanceof ItemStack) {
+					var15[var16] = ((ItemStack) ingredient).copy();
+				}
+				else if (ingredient instanceof String) {
+					// OreDictionary entry
+					var15[var16] = ingredient;
+				}
+
+			} else {
 				var15[var16] = null;
 			}
 		}
 
-		this.recipes.add(new ShapedTrainRecipes(var5, var6, var15, par1ItemStack));
-		this.shapedRecipes.add(new ShapedTrainRecipes(var5, var6, var15, par1ItemStack));
+		this.recipes.add(new ShapedTrainRecipes(var5, var6, var15, output));
+		this.shapedRecipes.add(new ShapedTrainRecipes(var5, var6, var15, output));
 	}
 
 	public void addShapelessRecipe(ItemStack par1ItemStack, Object... obj) {
@@ -163,31 +189,31 @@ public class TrainCraftingManager {
 	/**
 	 * returns the List<> of all recipes
 	 */
-	public List<ITCRecipe> getRecipeList() {
+	public List getRecipeList() {
 		return this.recipes;
 	}
-	
+
 	public List<ShapedTrainRecipes> getShapedRecipes() {
-        return Collections.unmodifiableList(shapedRecipes);
+		return Collections.unmodifiableList(shapedRecipes);
 	}
-	
+
 	public void addHearthFurnaceRecipe(ItemStack item1, ItemStack item2, ItemStack output, float xp, int cooktime){
 		if(getHearthFurnaceRecipe(item1, item2, true) != null){
 			return;
 		}
-		
+
 		int id1 = Item.getIdFromItem(item1.getItem());
 		int id2 = Item.getIdFromItem(item2.getItem());
-		
+
 		hearthFurnaceRecipes.add(new OpenHearthFurnaceRecipe(item1, item2, output, cooktime));
 		int recipeID = hearthFurnaceRecipes.size()-1;
-		
+
 		addIDtoHearthFurnaceMap(id1, recipeID);
 		addIDtoHearthFurnaceMap(id2, recipeID);
-		
+
 		this.hearthFurnaceXpMap.put(Item.getIdFromItem(output.getItem()), xp);
 	}
-	
+
 	public void addIDtoHearthFurnaceMap(int itemID, int recipeID){
 		ArrayList<Integer> list = hearthFurnaceMap.remove(itemID);
 		if(list == null){
@@ -196,59 +222,59 @@ public class TrainCraftingManager {
 		list.add(recipeID);
 		hearthFurnaceMap.put(itemID, list);
 	}
-		
+
 	public OpenHearthFurnaceRecipe getHearthFurnaceRecipe(ItemStack item1, ItemStack item2, boolean onAdd){
 		if(item1 == null || item2 == null)
 			return null;
-		
+
 		int id1 = Item.getIdFromItem(item1.getItem());
 		int id2 = Item.getIdFromItem(item2.getItem());
-		
+
 		ArrayList<Integer> recipes = hearthFurnaceMap.get(id1);
 		if(recipes == null)
 			return null;
-		
+
 		for(int recipeID : recipes){
 			if(hearthFurnaceRecipes.get(recipeID).matches(new ItemStack[]{item1, item2})){
 				return hearthFurnaceRecipes.get(recipeID);
 			}
 		}
-		
+
 		if(!onAdd){
 			return null;
 		}
-		
+
 		recipes = hearthFurnaceMap.get(id2);
 		for(int recipeID : recipes){
 			if(hearthFurnaceRecipes.get(recipeID).matches(new ItemStack[]{item1, item2})){
 				return hearthFurnaceRecipes.get(recipeID);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public int getHearthFurnaceRecipeDuration(ItemStack item1, ItemStack item2){
 		OpenHearthFurnaceRecipe recipe = getHearthFurnaceRecipe(item1, item2, false);
 		if(recipe != null)
 			return recipe.getCooktime();
 		return 600;
 	}
-	
+
 	public ItemStack getHearthFurnaceRecipeResult(ItemStack item1, ItemStack item2){
 		OpenHearthFurnaceRecipe recipe = getHearthFurnaceRecipe(item1, item2, false);
 		if(recipe != null)
 			return recipe.getCraftingResult();
 		return null;
 	}
-	
+
 	public float getHearthFurnaceRecipeExperience(ItemStack output){
 		Object out = this.hearthFurnaceXpMap.get(Item.getIdFromItem(output.getItem()));
 		if(out != null)
 			return (Float) out;
 		return 0;
 	}
-	
+
 	public ArrayList<OpenHearthFurnaceRecipe> getHearthFurnaceRecipeList(){
 		return hearthFurnaceRecipes;
 	}
