@@ -5,8 +5,8 @@ import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITCRecipe;
 import train.common.core.managers.TierRecipe;
 import train.common.library.ItemIDs;
-import train.common.recipes.ShapedTrainRecipes;
-import train.common.recipes.ShapelessTrainRecipe;
+import train.common.recipes.ITCRecipe.ShapedTrainRecipes;
+import train.common.recipes.ITCRecipe.ShapelessTrainRecipe;
 
 import java.util.ArrayList;
 import java.util.HashSet;
