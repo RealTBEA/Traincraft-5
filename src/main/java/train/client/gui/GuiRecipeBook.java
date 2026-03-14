@@ -607,11 +607,11 @@ public class GuiRecipeBook extends GuiScreen {
             return;
         int tier = recipeList.get(page).getTier();
         if (tier == 1)
-            mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.TEX_TIER_I));
+            mc.renderEngine.bindTexture(new ResourceLocation(Info.TEX_TIER_I));
         if (tier == 2)
-            mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.TEX_TIER_II));
+            mc.renderEngine.bindTexture(new ResourceLocation(Info.TEX_TIER_II));
         if (tier == 3)
-            mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.TEX_TIER_III));
+            mc.renderEngine.bindTexture(new ResourceLocation(Info.TEX_TIER_III));
         //if (side.equals("right"))
         //GL11.glScaled(0.7, 0.7, 0.7);
         if (side.equals("left"))
