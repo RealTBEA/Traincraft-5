@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityFreightIceWagon extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+icewagon", Traincraft.tcTab); 
-
+    public EntityFreightIceWagon(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityFreightIceWagon(World world) {
     super (world); } 
     //main stats

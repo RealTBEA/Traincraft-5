@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityTankLava extends LiquidTank {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tank_lava", Traincraft.tcTab); 
-
+    public EntityTankLava(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityTankLava(World world) {
     super (world); } 
     //main stats

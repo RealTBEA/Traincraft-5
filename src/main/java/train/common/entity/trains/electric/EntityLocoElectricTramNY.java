@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityLocoElectricTramNY extends ElectricTrain {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_tram_ny", Traincraft.tcTab); 
-    
+    public EntityLocoElectricTramNY(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityLocoElectricTramNY(World world) {
     super (world); } 
     //main stats

@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityFreightKClassRailBox extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_k_class_railbox", Traincraft.tcTab); 
-
+    public EntityFreightKClassRailBox(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityFreightKClassRailBox(World world) {
     super (world); } 
     //main stats

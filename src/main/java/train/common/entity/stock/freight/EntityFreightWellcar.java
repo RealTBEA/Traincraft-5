@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityFreightWellcar extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_freight_wellcar", Traincraft.tcTab); 
-
+    public EntityFreightWellcar(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityFreightWellcar(World world) {
     super (world); } 
     //main stats

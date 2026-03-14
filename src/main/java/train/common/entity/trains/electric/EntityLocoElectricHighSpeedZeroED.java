@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_high_speed_loco_zeroed", Traincraft.tcTab); 
-
+    public EntityLocoElectricHighSpeedZeroED(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityLocoElectricHighSpeedZeroED(World world) {
     super (world); } 
     //main stats

@@ -16,7 +16,8 @@ import train.common.library.ItemIDs;
 public class EntityPassengerRheingoldDining1 extends AbstractWorkCart {
 
     public static final Item thisItem = new ItemRollingStock(Info.modID+":+train_passenger_rheingolddining1", Traincraft.tcTab); 
-
+    public EntityPassengerRheingoldDining1(World world, double x, double y, double z) {
+    super(world, x, y, z); }
     public EntityPassengerRheingoldDining1(World world) {
     super (world); } 
     //main stats
