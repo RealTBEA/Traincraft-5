@@ -22,7 +22,16 @@ public class EntityLasersLines extends Entity {
 
 	}
 
+	public EntityLasersLines(World world, double d, double d1, double d2) {
+		super(world);
 
+		preventEntitySpawning = false;
+		noClip = true;
+		isImmuneToFire = true;
+
+		setSize(10, 10);
+		this.ignoreFrustumCheck = true;
+	}
 
 	public void setPositions(double x1, double y1, double z1, double x2, double y2, double z2) {
 		this.x1 = x1;
